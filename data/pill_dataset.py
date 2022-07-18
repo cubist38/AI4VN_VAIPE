@@ -1,0 +1,2 @@
+class PillDataset:
+    pass
