@@ -1,0 +1,11 @@
+*.pyc
+*.json
+*.jpg
+*.png
+*.zip
+*.rar
+*.tar
+*.DS_Store
+
+# for personal testing, all personal files shouldn't be pushed
+*personal*
