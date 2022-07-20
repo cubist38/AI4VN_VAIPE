@@ -21,3 +21,17 @@ cv2.waitKey(0)
 #closing all open windows 
 cv2.destroyAllWindows() 
 ```
+
+### 2. Drugname OCR
+```python
+from ocr.pres_ocr import pres_ocr
+
+# image_dir can be a path to specify image or a folder of images
+ocr_result = pres_ocr(image_dir='./images', saved=False)
+for item in ocr_result:
+    image_path, drugnames = item
+    print(image_path)
+    for drug in drugnames:
+        print(drug)
+    print('-----------------------------------------------------')
+```
