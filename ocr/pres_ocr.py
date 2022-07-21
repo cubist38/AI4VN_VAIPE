@@ -17,8 +17,8 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
             os.makedirs(result_folder)
 
     args = {
-        'det_model_dir': 'ocr/text_detector/PaddleOCR/weights/ch_PP-OCRv3_det_infer',
-        'cls_model_dir': 'ocr/text_classifier/vietocr/weights/vgg_seq2seq.pth',
+        'det_model_dir': './ocr/text_detector/PaddleOCR/weights/ch_PP-OCRv3_det_infer',
+        'cls_model_dir': './ocr/text_classifier/vietocr/weights/vgg_seq2seq.pth',
         'cls_model_name': 'vgg_seq2seq'
     }
     
