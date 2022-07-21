@@ -8,3 +8,7 @@
 
 # for personal testing, all personal files shouldn't be pushed
 *personal*
+
+# for weights
+*.pth
+inference.*
