@@ -67,6 +67,6 @@ def is_drugname(before: str, text: str, after: str) -> bool:
 
 def get_drugname(text: str) -> str:
     i = 0
-    while text[i].isdigit() or text[i] in DRUG_DELIM:
+    while i < len(text) and (text[i].isdigit() or text[i] in DRUG_DELIM):
         i += 1
-    return text[i:]
+    return text[i:] if i < len(text) else ''
