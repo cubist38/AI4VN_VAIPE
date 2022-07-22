@@ -12,3 +12,5 @@
 # for weights
 *.pth
 inference.*
+
+data/public_train/
