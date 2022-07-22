@@ -18,7 +18,7 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
 
     args = {
         'det_model_dir': './ocr/text_detector/PaddleOCR/weights/ch_PP-OCRv3_det_infer',
-        'cls_model_dir': './ocr/text_classifier/vietocr/weights/transformerocr.pth',
+        'cls_model_dir': './ocr/text_classifier/vietocr/weights/seq2seq_finetuned.pth',
         'cls_model_name': 'vgg_seq2seq'
     }
     
@@ -46,7 +46,10 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
             text = text_of_image[i]
             after = '' if i == n - 1 else text_of_image[i + 1]
             if is_drugname(before, text, after):
-                drugnames.append(get_drugname(text))
+                name = get_drugname(text)
+                if len(name) == 0:
+                    continue
+                drugnames.append(name)
                 if saved:
                     filtered_boxes.append(boxes[i])
 
