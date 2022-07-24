@@ -21,7 +21,7 @@ class MobilenetV3():
 class Resnet18():
     def __init__(self, pretrained=False):
         self.model = resnet18(pretrained=pretrained)
-        # self.model.fc = _Identity() # using when dont wanna using classifier layers
+        self.model.fc = _Identity()
         
     def predict(self, input):
         return self.model(input)
