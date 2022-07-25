@@ -1,1 +1,0 @@
-python tools/convert_to_coco.py --data_json data/train_pill.json --src_image data/public_train/pill/image --save data/coco_train.json --test True
