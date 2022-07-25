@@ -4,6 +4,8 @@
 *.zip
 *.rar
 *.tar
+*.json
+*.csv
 *.DS_Store
 
 # for personal testing, all personal files shouldn't be pushed
@@ -14,3 +16,4 @@
 inference.*
 
 data/public_train/
+.vscode/
