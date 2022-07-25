@@ -1,4 +1,3 @@
-import numpy as np
 import os
 from typing import Dict
 from torch.utils.data import DataLoader
@@ -23,8 +22,8 @@ def get_dataloader(cfg: Dict, data_dict: Dict):
     train_dataset = PillDataset(X_train, y_train, cfg['img_size'], get_train_transformer())
     valid_dataset = PillDataset(X_test, y_test, cfg['img_size'], get_valid_transformer()) 
 
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4, pin_memory=True, drop_last=True)
-    valid_loader = DataLoader(valid_dataset, batch_size=16, shuffle=False, num_workers=4, pin_memory=True, drop_last=False)
+    train_loader = DataLoader(train_dataset, batch_size=cfg['batch_size'], shuffle=True, num_workers=4, pin_memory=True, drop_last=True)
+    valid_loader = DataLoader(valid_dataset, batch_size=cfg['batch_size']*2, shuffle=False, num_workers=4, pin_memory=True, drop_last=False)
 
     return train_loader, valid_loader
 

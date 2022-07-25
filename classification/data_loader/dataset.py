@@ -3,7 +3,7 @@ from typing import List
 import cv2
 from PIL import Image
 import numpy as np
-from .utils import resize_image
+from ..utils import resize_image
 
 class PillDataset(data.Dataset):
     def __init__(self, X: List, y: List, img_size: int, transform):

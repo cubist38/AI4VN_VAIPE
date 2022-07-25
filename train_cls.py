@@ -11,7 +11,7 @@ if __name__ == '__main__':
         data_dict = json.load(f)
 
     device = torch.device(cfg['device'])
-    train_loader, valid_loader = get_dataloader(cfg['img_src'], data_dict)
+    train_loader, valid_loader = get_dataloader(cfg, data_dict)
 
     model = swin_tiny_transformer(cfg['num_classes'])
     model = model.to(device)
