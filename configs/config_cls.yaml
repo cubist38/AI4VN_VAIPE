@@ -1,0 +1,24 @@
+batch_size: 32
+img_size: 224
+device: cuda:0
+img_src: data/label/single_pill
+data_dict: data/label/single_pill.json
+num_classes: 107
+
+trainer:
+  epochs: 20
+  backbone: swin_tiny_transformer
+  freeze: False
+  unfreeze_epoch: 40
+  log_step: 100
+  eval_step: 9999
+
+  save_path: weights/cls
+  model_name: swin_tiny_cls
+
+  lr: 0.0001
+  cls_lr: 0.001
+
+  optim:
+    milestone: [10]
+    gamma: 0.1

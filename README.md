@@ -1,25 +1,30 @@
 # AI4VN_VAIPE
 
-## Visualizer
-### 1. Pills
-```python
-from utils.io import read_image, read_bbox
-from visualizer.pill import apply_bbox
-import cv2
+## Dataset
+Download the data at [Google drive](https://drive.google.com/drive/folders/1PNhStby1B_xZBwS1mic-EssPX8Q_0odR?usp=sharing) and re-ordering follows the below structure.
+```
+---data/
+    |---label/
+        |---single_pill/
+        |---single_pill.json
+        |---pills/
+            |---image/
+            |---label/
+        |---pills.json
+    |--unlabel/             # for inference
+```
 
-image_path = 'data/public_train/pill/image/VAIPE_P_0_0.jpg'
-bbox_path = 'data/public_train/pill/label/VAIPE_P_0_0.json'
 
-image = read_image(image_path)
-bbox_list = read_bbox(bbox_path)
-
-bbox_image = apply_bbox(image, bbox_list)
-
-cv2.imshow('visualize pills', bbox_image)
-cv2.waitKey(0)
-
-#closing all open windows 
-cv2.destroyAllWindows() 
+## Pills classification
+### 1. Download trained weights
+All trained models can be found at [Google drive](https://drive.google.com/drive/folders/1kUopc2ZHbzSY5lTboR7XFtIKtIVdQwAo?usp=sharing).  
+Download and move to `weights/cls/`.
+### 2. Run classification
+(For re-training classification)  
+Change the hyper-parameters in coressponding config file `configs/config_cls.yaml`.  
+To run training  
+```bash
+python train_cls.py
 ```
 
 ## Drugname OCR
@@ -46,4 +51,25 @@ for item in ocr_result:
 
 with open("./personal_pres_ocr_output.json", "w", encoding="utf-8") as f:
     json.dump(ocr_output_dict, f, ensure_ascii=False)
+```
+
+## Visualizer
+```python
+from utils.io import read_image, read_bbox
+from visualizer.pill import apply_bbox
+import cv2
+
+image_path = 'data/label/pill/image/VAIPE_P_0_0.jpg'
+bbox_path = 'data/label/pill/label/VAIPE_P_0_0.json'
+
+image = read_image(image_path)
+bbox_list = read_bbox(bbox_path)
+
+bbox_image = apply_bbox(image, bbox_list)
+
+cv2.imshow('visualize pills', bbox_image)
+cv2.waitKey(0)
+
+#closing all open windows 
+cv2.destroyAllWindows() 
 ```

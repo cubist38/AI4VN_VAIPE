@@ -12,7 +12,7 @@ parser.add_argument('--save', default='data/coco.json', type=str, help='Path to 
 parser.add_argument('--test', default=False, type=bool, help='set True to test coco covertor')
 args = parser.parse_args()
 
-def convert(dataset_dicts: Dict, src_image: str, num_classes: int = 108):
+def convert(dataset_dicts: Dict, src_image: str, num_classes: int = 122):
     # current an id can have more than 1 name.
     categories = [
         {"id": id, "name": id}
@@ -37,7 +37,7 @@ def convert(dataset_dicts: Dict, src_image: str, num_classes: int = 108):
         }
         coco_images.append(coco_image)
 
-        for obj in image_dict['label']:
+        for obj in image_dict['annotation']:
             # bbox must be xywh format
             bbox = [obj['x'], obj['y'], obj['w'], obj['h']]
 
