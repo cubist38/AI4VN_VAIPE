@@ -1,0 +1,2 @@
+python tools/convert_to_coco.py --data_json data/label/train.json --src_image data/label/pills/image --save data/coco_train.json
+python tools/convert_to_coco.py --data_json data/label/val.json --src_image data/label/pills/image --save data/coco_val.json

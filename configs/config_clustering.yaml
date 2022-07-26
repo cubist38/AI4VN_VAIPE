@@ -1,0 +1,12 @@
+device: cuda:0
+batch_size: 32
+feature_dim: 768
+
+img_src: data/label/single_pill
+data_dict: data/label/single_pill.json
+bbox_dict: data/label/single_pill_bbox.json
+weight: weights/cls/swin_tiny_cls.pth
+K: 122 # k-means
+
+detection_data_path: data/label/pill_detection.json
+label_freq_path: data/label/label_freq.json
