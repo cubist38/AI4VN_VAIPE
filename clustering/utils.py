@@ -1,4 +1,6 @@
 import cv2
+import os
+import shutil
 import numpy as np
 
 def resize_image(image: np.array, desired_size: int) -> np.array:
@@ -31,3 +33,26 @@ def resize_image(image: np.array, desired_size: int) -> np.array:
         value = [0, 0, 0])
 
     return resized
+
+
+def gen_cluster_result(dst_folder: str, image_paths: list, labels: list) -> None:
+    '''
+        Generate image folders based on clustering result
+
+        Args:
+            - `dst_folder`: Path to the directory containing the results
+            - `clustering_output`: a list of N list, each list contains the paths of images in the corresponding cluster
+    '''
+    if os.path.exists(dst_folder):
+        os.remove(dst_folder)
+    
+    os.mkdir(dst_folder)
+
+    for i in range(len(image_paths)):
+        path = image_paths[i]
+        label = labels[i]
+        folder = os.path.join(dst_folder, str(label))
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+        name = path.split('/')[-1]
+        shutil.copy(path, os.path.join(folder, name))

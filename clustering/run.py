@@ -1,86 +1,75 @@
-from typing import Dict
+from clustering.models.swin_transformer import swin_tiny_transformer
+from clustering.extractor import get_features
+from sklearn.cluster import DBSCAN, KMeans
 import os
-import cv2
-import numpy as np
 import torch
-from torch import nn
-from torchvision import transforms
-from model import MobilenetV3
-from sklearn.cluster import DBSCAN
-from sklearn.decomposition import PCA
-from config import *
+import json
 
-
-# Transform the image, so it becomes readable with the model
-transformer = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
-    transforms.ToTensor()
-])
-
-device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
-
-def extract_features(image_path: str, feature_extractor: nn.Module):
-    image = cv2.imread(image_path)
-    image = transformer(image)
-    image = image.reshape(1, 3, IMAGE_SIZE, IMAGE_SIZE)
-    image = image.to(device)
-    with torch.no_grad():
-        feature = feature_extractor(image)
-    # convert to nparray and reshape it
-    feature = feature.cpu().detach().numpy().reshape(-1)
-    return feature
-
-
-def do_clustering(image_src: str, image_list: list, feature_extractor: nn.Module) -> list:
+def do_clustering(cfg: dict) -> list:
     '''
-        Args:
-            image_src: path to image folder
-            image_list: name of images
-        Return:
-            clustering_output = N x [] 
-            where
-                - N is the number of clusters
-                - each group contains a list of image path belong to that group
+        Run the clustering algorithm (KMeans at the current time) with the configuration `cfg`
+
+        Returns:
+            - `(image_paths, kmean_output)`: Path to each image and its cluster, use for generate image folders 
+            based on the clustering result
+            -  `detection_data_dict`: Output used for object detection algorithms
+            - `label_freq_dict`: Frequency of each original class (from 0 to 107) on each output cluster
+
     '''
-    image_paths = np.array([os.path.join(image_src, image_name)
-                           for image_name in image_list])
+    with open(cfg['data_dict']) as f:
+        data_dict = json.load(f)
 
-    # Feature extraction
-    data = {}
-    for path in image_paths:
-        data[path] = extract_features(path, feature_extractor)
+    device = torch.device(cfg['device'])
 
-    # PCA to 150-dimension
-    features = [feature for feature in data.values()]
-    pca = PCA(n_components=150)
-    pca.fit(features)
-    features = pca.transform(features)
+    net = swin_tiny_transformer().to(device)
+    net.load_state_dict(torch.load(cfg['weight']), strict=False)
+    net.eval()
 
-    return None
+    image_paths = [os.path.join(cfg['img_src'], img_name) for img_name in data_dict.keys()]
+    image_labels = list(data_dict.values())
 
-    # # DBSCAN
-    # dbscan = DBSCAN(eps=THRES, min_samples=MINPTS + 1, metric='euclidean')
-    # clusters = dbscan.fit_predict(features)
+    features = get_features(cfg, net, image_paths)
+    
+    print('K-means clustering ...', end = ' ')
+    kmeans = KMeans(n_clusters=cfg['K'])
+    kmean_output = kmeans.fit_predict(features)
+    print('Done!')
 
-    # clustering_output = []
-    # # noise image will have cluster = -1, we consider it as a independent class
-    # noise_paths = image_paths[clusters == -1]
-    # for path in noise_paths:
-    #     clustering_output.append([path])
-    # # for "real" cluster:
-    # for cluster_id in range(0, max(clusters)):
-    #     cluster_paths = image_paths[clusters == cluster_id]
-    #     clustering_output.append(list(cluster_paths))
+    new_label_dict = {}
+    for id, img_name in enumerate(data_dict.keys()):
+        new_label_dict[img_name] = kmean_output[id]
+    
+    with open(cfg['bbox_dict']) as f:
+        bbox_dict = json.load(f)
 
-    # return clustering_output
+    annotation_dict = {}
+    label_freq_dict = {}
+    for item in bbox_dict:
+        img_id = item['img_id']
+        new_label = int(new_label_dict[img_id])
 
-# if __name__ == '__main__':
-#     feature_extractor = MobilenetV3(option='large', pretrained=True)
-#     feature_extractor.to(device)
+        if new_label not in label_freq_dict:
+            label_freq_dict[new_label] = [0 for _ in range(108)]
+        
+        label_freq_dict[new_label][item['label']] += 1
 
-#     base_path = 'data/personal_new_pill/image'
-#     image_name = 'VAIPE_P_0_0_0.jpg'
-#     path = os.path.join(base_path, image_name)
-#     features = extract_features(path, feature_extractor)
-#     print(features.shape)
+        root_img = '_'.join(img_id.split('_')[:-1]) + '.jpg'
+        if root_img not in annotation_dict:
+            annotation_dict[root_img] = []
+
+        annotation = {}
+        annotation['x'] = item['x']
+        annotation['y'] = item['y']
+        annotation['w'] = item['w']
+        annotation['h'] = item['h']
+        annotation['label'] = new_label
+        annotation_dict[root_img].append(annotation)
+
+    detection_data_dict = []
+    for root_img in annotation_dict.keys():
+        detection_item = {}
+        detection_item['image_id'] = root_img
+        detection_item['annotation'] = annotation_dict[root_img]
+        detection_data_dict.append(detection_item)
+
+    return (image_paths, kmean_output), detection_data_dict, label_freq_dict
