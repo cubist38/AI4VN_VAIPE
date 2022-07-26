@@ -18,6 +18,5 @@ class MobilenetV3(nn.Module):
         self.model.classifier = self.model.classifier[:2] # just using one Linear Layer + Hardswish in model classifier
 
     def forward(self, input):
-        self.model
         return self.model(input)
 
