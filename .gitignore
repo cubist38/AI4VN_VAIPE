@@ -15,6 +15,7 @@
 *.pth
 inference.*
 *.ipynb
+*.pt
 
 data/public_train/
 .vscode/

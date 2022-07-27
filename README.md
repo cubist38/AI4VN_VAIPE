@@ -31,7 +31,7 @@ python train_cls.py
 ### 1. Download pre-trained weights
 
 - Firstly, you have to download <a href="https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar">text detector weights</a> from PaddleOCR. Then extract it to this path: `./ocr/text_detector/PaddleOCR/weights`.
-- After that, download <a href="https://drive.google.com/uc?id=1ePh6kXJtnAUG7zqXixUEEor54uVnEY4k">text classifier weights</a> (fine-tuning from pre-trained model of vietocr) and put it in this path: `./ocr/text_classifier/vietocr/weights`.
+- After that, download <a href="https://drive.google.com/uc?id=1O5DkqiM3lE50sjzVz5_NuguILaS4BUER">text classifier weights</a> (fine-tuning from pre-trained model of vietocr) and put it in this path: `./ocr/text_classifier/vietocr/weights`.
 
 ### 2. Run OCR for prescription
 
@@ -51,6 +51,29 @@ for item in ocr_result:
 
 with open("./personal_pres_ocr_output.json", "w", encoding="utf-8") as f:
     json.dump(ocr_output_dict, f, ensure_ascii=False)
+```
+
+## Pill detection
+
+### 3.1. Download weights of detection models
+
+- You have to download [YOLOv5 weights](https://drive.google.com/uc?id=1Eiwp6vd5wK1Fu_Wxuowpo5nx2DUhcyzq) and put it in this path: `./detection/yolo/yolov5/runs/train/exp/weights/`.
+
+### 3.2. Run object detection for pill images
+
+```python
+from detection.run import do_detection
+
+image_folder = './personal_images'
+
+results = do_detection(image_folder, model_name='yolov5')
+
+for image, boxes in results.items():
+    print(image)
+    print('xmin, xmax, ymin, ymax, label, conf')
+    for box in boxes:
+        print(box)
+    print('----------------------------')
 ```
 
 ## Visualizer
