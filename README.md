@@ -55,11 +55,11 @@ with open("./personal_pres_ocr_output.json", "w", encoding="utf-8") as f:
 
 ## Pill detection
 
-### 3.1. Download weights of detection models
+### 1. Download weights of detection models
 
 - You have to download [YOLOv5 weights](https://drive.google.com/uc?id=1Eiwp6vd5wK1Fu_Wxuowpo5nx2DUhcyzq) and put it in this path: `./detection/yolo/yolov5/runs/train/exp/weights/`.
 
-### 3.2. Run object detection for pill images
+### 2. Run object detection for pill images
 
 ```python
 from detection.run import do_detection
@@ -70,7 +70,7 @@ results = do_detection(image_folder, model_name='yolov5')
 
 for image, boxes in results.items():
     print(image)
-    print('xmin, xmax, ymin, ymax, label, conf')
+    print('xmin, ymin, xmax, ymax, label, conf')
     for box in boxes:
         print(box)
     print('----------------------------')
