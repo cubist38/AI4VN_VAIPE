@@ -15,7 +15,7 @@ def do_detection(image_folder: str, model_name: str = 'yolov5') -> Dict:
     results = {}
 
     if model_name == 'yolov5':
-        model = torch.hub.load('./detection/yolo/yolov5', 'custom', path='./detection/yolo/yolov5/runs/train/exp/weights/yolov5_best.pt', source='local') 
+        model = torch.hub.load('./detection/yolo/yolov5', 'custom', path='./detection/yolo/yolov5/runs/train/exp/yolov5_best.pt', source='local') 
         image_files = os.listdir(image_folder)
         for file in image_files:
             path = os.path.join(image_folder, file)
