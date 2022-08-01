@@ -1,8 +1,10 @@
 import cv2
 import os
+
+from paddle import crop
 from ocr.text_detector.my_detector import MyDetector
 from ocr.text_classifier.my_classifier import MyClassifier
-from utils.prescription import *
+from utilities.prescription import *
 
 def pres_ocr(image_dir: str, saved: bool = False) -> list:
     '''
@@ -31,12 +33,18 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
         image = cv2.imread(image_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+        if image is None:
+            continue
+
         text_of_image = []
         for box in boxes:
             xmin, ymin, xmax, ymax = box
             cropped = crop_image(image, xmin, ymin, xmax, ymax, delta_w=6, delta_h=3)
-            text = classifier(cropped).rstrip()
-            text_of_image.append(text)
+            try:
+                text = classifier(cropped).rstrip()
+                text_of_image.append(text)
+            except:
+                continue
 
         drugnames = []
         filtered_boxes = []
@@ -53,7 +61,9 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
                 if saved:
                     filtered_boxes.append(boxes[i])
 
-        ocr_result.append((image_path, drugnames))
+        tmp = image_path.replace('\\', '/')
+        image_name = tmp.split('/')[-1]
+        ocr_result.append((image_name, drugnames))
 
         if saved:
             out_img = pres_ocr_visualize(image_path, filtered_boxes, drugnames)

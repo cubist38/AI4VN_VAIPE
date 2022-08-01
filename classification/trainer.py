@@ -2,7 +2,7 @@ from typing import Dict
 import torch
 from torch import optim, nn
 from tqdm import tqdm
-from utils.dir import create_directory
+from utilities.dir import create_directory
 import os
 
 class PillTrainer:

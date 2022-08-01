@@ -7,7 +7,7 @@ from .vietocr.vietocr.tool.predictor import Predictor
 from .vietocr.vietocr.tool.config import Cfg
 from PIL import Image
 import numpy as np
-from utils.prescription import *
+from utilities.prescription import *
 
 class MyClassifier():
     def __init__(self, args: dict):
