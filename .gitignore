@@ -15,4 +15,5 @@ inference.*
 *.pt
 
 data/public_train/
+data/public_test/
 .vscode/
