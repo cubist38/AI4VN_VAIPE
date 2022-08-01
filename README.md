@@ -5,6 +5,7 @@ Content:
 - <a href="#classification">Pill Classification</a>
 - <a href="#ocr">Drugname OCR</a>
 - <a href="#detection">Pill detection</a>
+- <a href="#result">Generate results</a>
 - <a href="#evaluation">Evaluation</a>
 - <a href="#visualizer">Visualizer</a>
 
@@ -91,10 +92,33 @@ for image, boxes in results.items():
     print('----------------------------')
 ```
 
+## Generate results
+<span id="result"></span>
+
+To generate the result file (.csv) for data in folder at `data_path`, the structure of this folder has to be in the following format:
+
+```
+---data_path/
+    |---pill/
+        |---image/
+    |---prescription/
+        |---image/
+    |---pill_pres_map.json
+```
+
+Then run this code:
+
+```python
+from result.run import get_result
+
+data_path = '/path/to/data_path'
+get_result(data_path, output_path = './results/csv/results.csv')
+```
+
 ## Evaluation
 <span id="evaluation"></span>
 
-After you generate `results.csv` file based on the script at `results/result_process.ipynb`, let's run the following code to get the wmAP metrics of your result:
+After you generate the result file from preview section, let's run the following code to get the wmAP metrics of your result:
 
 ```python
 from evaluate.run import eval
@@ -105,7 +129,7 @@ eval('path/to/your/results.csv', 'data/train.csv')
 <span id="visualizer"></span>
 
 ```python
-from utils.io import read_image, read_bbox
+from utilities.io import read_image, read_bbox
 from visualizer.pill import apply_bbox
 import cv2
 
