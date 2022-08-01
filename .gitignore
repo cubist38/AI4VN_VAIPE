@@ -4,8 +4,6 @@
 *.zip
 *.rar
 *.tar
-*.json
-*.csv
 *.DS_Store
 
 # for personal testing, all personal files shouldn't be pushed
@@ -14,7 +12,6 @@
 # for weights
 *.pth
 inference.*
-*.ipynb
 *.pt
 
 data/public_train/
