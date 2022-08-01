@@ -1,6 +1,16 @@
 # AI4VN_VAIPE
 
+Content:
+- <a href="#dataset">Dataset</a>
+- <a href="#classification">Pill Classification</a>
+- <a href="#ocr">Drugname OCR</a>
+- <a href="#detection">Pill detection</a>
+- <a href="#evaluation">Evaluation</a>
+- <a href="#visualizer">Visualizer</a>
+
+
 ## Dataset
+<span id="dataset"></span>
 Download the data at [Google drive](https://drive.google.com/drive/folders/1PNhStby1B_xZBwS1mic-EssPX8Q_0odR?usp=sharing) and re-ordering follows the below structure.
 ```
 ---data/
@@ -16,6 +26,8 @@ Download the data at [Google drive](https://drive.google.com/drive/folders/1PNhS
 
 
 ## Pills classification
+<span id="classification"></span>
+
 ### 1. Download trained weights
 All trained models can be found at [Google drive](https://drive.google.com/drive/folders/1kUopc2ZHbzSY5lTboR7XFtIKtIVdQwAo?usp=sharing).  
 Download and move to `weights/cls/`.
@@ -28,6 +40,8 @@ python train_cls.py
 ```
 
 ## Drugname OCR
+<span id="ocr"></span>
+
 ### 1. Download pre-trained weights
 
 - Firstly, you have to download <a href="https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar">text detector weights</a> from PaddleOCR. Then extract it to this path: `./ocr/text_detector/PaddleOCR/weights`.
@@ -54,6 +68,7 @@ with open("./personal_pres_ocr_output.json", "w", encoding="utf-8") as f:
 ```
 
 ## Pill detection
+<span id="detection"></span>
 
 ### 1. Download weights of detection models
 
@@ -77,6 +92,7 @@ for image, boxes in results.items():
 ```
 
 ## Evaluation
+<span id="evaluation"></span>
 
 After you generate `results.csv` file based on the script at `results/result_process.ipynb`, let's run the following code to get the wmAP metrics of your result:
 
@@ -86,6 +102,8 @@ eval('path/to/your/results.csv', 'data/train.csv')
 ```
 
 ## Visualizer
+<span id="visualizer"></span>
+
 ```python
 from utils.io import read_image, read_bbox
 from visualizer.pill import apply_bbox
