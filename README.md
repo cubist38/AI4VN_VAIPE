@@ -76,6 +76,15 @@ for image, boxes in results.items():
     print('----------------------------')
 ```
 
+## Evaluation
+
+After you generate `results.csv` file based on the script at `results/result_process.ipynb`, let's run the following code to get the wmAP metrics of your result:
+
+```python
+from evaluate.run import eval
+eval('path/to/your/results.csv', 'data/train.csv')
+```
+
 ## Visualizer
 ```python
 from utils.io import read_image, read_bbox
