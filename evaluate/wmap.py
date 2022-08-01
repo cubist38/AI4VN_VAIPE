@@ -1,11 +1,4 @@
-import os
-from tqdm import tqdm
 import numpy as np
-import json
-import torch
-import yaml
-from pathlib import Path
-
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
@@ -103,7 +96,7 @@ def compute_wmap(anno_path: str, pred_path: str):
             Format of predict json file:
             [
                 {
-                    "image_id": str,
+                    "image_id": int,
                     "category_id": int,
                     "bbox": [x, y, w, h],
                     "score": float
@@ -118,5 +111,6 @@ def compute_wmap(anno_path: str, pred_path: str):
     cocoEval.evaluate()
     cocoEval.accumulate()
     cocoEval.summarize()
+    print(cocoEval.stats)
     map, map50 = cocoEval.stats[:2]  # update results (mAP@0.5:0.95, mAP@0.5)
     return (map50, map)

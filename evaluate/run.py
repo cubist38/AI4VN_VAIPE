@@ -18,8 +18,8 @@ def eval(results_path: str, train_path: str):
     images = results['image_name']
     train_df = train_df[train_df['image_id'].isin(images)]
 
-    anno_path = csv_to_coco(train_df)
-    pred_path = results_to_coco(results)
+    anno_path, image_id_map = csv_to_coco(train_df)
+    pred_path = results_to_coco(results, image_id_map)
     
     wmap50, wmap = compute_wmap(anno_path, pred_path)
     print('wmAP50:', wmap50)
