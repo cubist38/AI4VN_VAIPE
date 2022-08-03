@@ -134,7 +134,7 @@ def get_result(data_path: str, output_path: str = './results/csv/result.csv', nu
 
     # 2. Object detection for pill
     pills_folder = os.path.join(data_path, 'pill/image')
-    od_results = run_od(pills_folder, num_classes)
+    od_results = run_od(pills_folder, str(num_classes))
     print('Compelete Object detection steps...')
 
     # 3. Final result
