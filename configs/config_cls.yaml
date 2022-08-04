@@ -1,8 +1,9 @@
 batch_size: 32
 img_size: 224
 device: cuda:0
-img_src: data/label/single_pill
-data_dict: data/label/single_pill.json
+img_src: data/process_data/labeled_pills
+test_img_src: data/submit_crop_data
+data_dict: data/process_data/data_single_pills.json
 num_classes: 107
 
 trainer:

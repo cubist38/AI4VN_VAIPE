@@ -31,7 +31,7 @@ class PillTrainer:
         if data_loaders is not None:
             [self.train_loader, self.val_loader] = data_loaders
         
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.BCELoss()
         self.best = 0
 
     def validate(self, loader, step: int, log = 'valid'):
@@ -55,7 +55,7 @@ class PillTrainer:
                 loss = self.criterion(pred, label)
                 total_loss += loss.item()
                 predictions[idx:idx + batch_size, :] = torch.argmax(pred, 1).unsqueeze(-1)
-                true_labels[idx:idx + batch_size, :] = label.unsqueeze(-1)
+                true_labels[idx:idx + batch_size, :] = torch.argmax(label, 1).unsqueeze(-1)
 
                 idx += batch_size
 
