@@ -89,23 +89,19 @@ def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
 
 # ====================== UTILS ==================== #
 # This is the function which maps from text to vaipe's label.
-def find_vaipe_label(text):
-    for t in text:
-        for dic in label_drugname:
-            for d in dic['drugnames']:
-                if text == d:
-                    return dic['label']
-    return -1
+def find_vaipe_label(label_drugname: Dict, text):
+    return label_drugname[text]
 
 # We should pass the ocr_output_dict to this function to have the mapping.
-def text_to_vaipe_label(ocr):
+def text_to_vaipe_label(label_drugname: Dict, ocr):
     new_ocr = {}
     for key, value in ocr.items():
         labels = []
         image_name = key.split('/')[-1]
         for text in value:
-            vaipe_label = find_vaipe_label(text)
-            labels.append(vaipe_label)
+            vaipe_label = find_vaipe_label(label_drugname, text)
+            for t in vaipe_label:
+                labels.append(t)
         new_ocr[image_name] = labels
     return new_ocr
     
@@ -171,7 +167,7 @@ if __name__ == '__main__':
         crop_detection_map = json.load(f)
     classifier_df = pd.read_csv(cfg['classifier']['output'])
 
-    ocr = text_to_vaipe_label(ocr_output_dict)
+    ocr = text_to_vaipe_label(label_drugname, ocr_output_dict)
 
     results = {}
     for i in range(len(classifier_df)):

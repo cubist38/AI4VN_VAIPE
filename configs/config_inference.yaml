@@ -1,15 +1,15 @@
-image_dir: data/unlabel/pill/image
+image_dir: data/public_test/pill/image
 device: 'cuda:0'
 
 label_drugnames_path: results/label_drugnames.json
-pill_pres_map_path: data/unlabel/pill_pres_map.json
+pill_pres_map_path: data/public_test/pill_pres_map.json
 submit_file: results/csv/results.csv
 
 ocr:
   output: results/ocr_output.json
 
 detection:
-  model_conf: 0.01
+  model_conf: 0.2
   weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_best.pt
 
 classifier:
