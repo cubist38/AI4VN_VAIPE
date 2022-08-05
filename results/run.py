@@ -49,9 +49,9 @@ def run_ocr(image_dir: str) -> Dict:
     return ocr_result
 
 
-def run_od(image_dir: str, num_classes: str) -> Dict:
+def run_od(image_dir: str, num_classes: str, batch_size: int = 32) -> Dict:
     # Run OD algorithm
-    results = do_detection(image_dir, model_name='yolov5')
+    results = do_detection(image_dir, batch_size=batch_size, model_name='yolov5')
 
     # Get the real label
     path = 'data/label/kmeans_' + num_classes + '/label_freq.json'
@@ -134,7 +134,7 @@ def get_result(data_path: str, output_path: str = './results/csv/result.csv', nu
 
     # 2. Object detection for pill
     pills_folder = os.path.join(data_path, 'pill/image')
-    od_results = run_od(pills_folder, str(num_classes))
+    od_results = run_od(pills_folder, str(num_classes), batch_size=32)
     print('Compelete Object detection steps...')
 
     # 3. Final result
