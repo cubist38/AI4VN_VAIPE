@@ -49,12 +49,13 @@ def run_ocr(image_dir: str) -> Dict:
     return ocr_result
 
 
-def run_od(image_dir: str) -> Dict:
+def run_od(image_dir: str, num_classes: str) -> Dict:
     # Run OD algorithm
     results = do_detection(image_dir, model_name='yolov5')
 
     # Get the real label
-    with open('data/label_freq.json') as f:
+    path = 'data/label/kmeans_' + num_classes + '/label_freq.json'
+    with open(path) as f:
         label_freq = json.load(f)
     
     def get_vaipe_label(kmeans_label):
@@ -115,7 +116,7 @@ def find_out_of_pres(od_result: Dict, ocr_result: Dict, pill_pres_map_path: str)
     return final_result
 
 
-def get_result(data_path: str, output_path: str = './results/csv/result.csv'):
+def get_result(data_path: str, output_path: str = './results/csv/result.csv', num_classes = 122):
     '''
         Generate result file for data in `data_path`
         The structure of folder at `data_path` should be in the following format:
@@ -133,7 +134,7 @@ def get_result(data_path: str, output_path: str = './results/csv/result.csv'):
 
     # 2. Object detection for pill
     pills_folder = os.path.join(data_path, 'pill/image')
-    od_results = run_od(pills_folder)
+    od_results = run_od(pills_folder, str(num_classes))
     print('Compelete Object detection steps...')
 
     # 3. Final result

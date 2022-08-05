@@ -10,6 +10,7 @@ class SwinTransformer(nn.Module):
         self.classify = nn.Sequential(
             nn.Dropout(0.5),
             nn.Linear(num_features, num_classes),
+            nn.Sigmoid()
         )
 
     def freeze_header(self):
