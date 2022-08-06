@@ -23,17 +23,14 @@ def run_ocr(image_dir: str) -> Dict:
             raw_dict[image_path].append(drug)
 
     # Maps from text to vaipe's label.
-    label_drugnames_path = 'data/label_drugnames.json'
-    with open(label_drugnames_path, 'r', encoding='utf-8') as f:
-        label_drugnames = json.load(f)
+    label_drugname_path = 'data/label_drugname.json'
+    with open(label_drugname_path, 'r', encoding='utf-8') as f:
+        label_drugname = json.load(f)
         
     def find_vaipe_label(text):
-        for t in text:
-            for dic in label_drugnames:
-                for d in dic['drugnames']:
-                    if text == d:
-                        return dic['label']
-        return -1
+        return label_drugname[text]
+
+    
     def text_to_vaipe_label(ocr):
         new_ocr = {}
         for key, value in ocr.items():
@@ -41,7 +38,8 @@ def run_ocr(image_dir: str) -> Dict:
             image_name = key.split('/')[-1]
             for text in value:
                 vaipe_label = find_vaipe_label(text)
-                labels.append(vaipe_label)
+                for t in vaipe_label:
+                    labels.append(t)
             new_ocr[image_name] = labels
         return new_ocr
         
