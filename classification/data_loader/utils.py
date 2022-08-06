@@ -3,19 +3,8 @@ from typing import Dict
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from .dataset import PillDataset, TestPillDataset
-from sklearn.model_selection import train_test_split
 
-def get_dataloader(cfg: Dict, data_dict: Dict):
-    image_paths, image_labels = [], []
-    for img_name, label in data_dict.items():
-        if label != 107:
-            image_paths.append(os.path.join(cfg['img_src'], str(label), img_name))
-            image_labels.append(label)
-    
-    print(f'Found {len(image_labels)} images has label != 107')
-
-    X_train, X_test, y_train, y_test = train_test_split(image_paths, image_labels, 
-                                                        test_size=0.3, random_state=2022)
+def get_dataloader(cfg: Dict, X_train, X_test, y_train, y_test):
 
     print(f'N.Train = {len(X_train)}, N.Test = {len(X_test)}')
 

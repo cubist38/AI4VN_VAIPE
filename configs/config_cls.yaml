@@ -1,10 +1,13 @@
 batch_size: 32
 img_size: 224
 device: cuda:0
+
 img_src: data/process_data/labeled_pills
-test_img_src: data/submit_crop_data
+unlabeled_img_src: data/crop_data
 data_dict: data/process_data/data_single_pills.json
 num_classes: 107
+
+k_fold: 0 # > 0 to use k-fold
 
 trainer:
   epochs: 20
@@ -15,7 +18,7 @@ trainer:
   eval_step: 9999
 
   save_path: weights/cls
-  model_name: swin_tiny_cls
+  model_name: swin_tiny_transformer
 
   lr: 0.0001
   cls_lr: 0.001

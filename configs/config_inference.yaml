@@ -10,15 +10,17 @@ ocr:
 
 detection:
   model_conf: 0.2
-  weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_best.pt
+  weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_pill.pt
 
 classifier:
+  k_fold: True
   threshold: 0.5
   num_classes: 107
   batch_size: 32
   img_size: 224
   test_img_dir: data/crop_data
-  weight_path: weights/cls/swin_tiny_cls.pth
+  weight_k_fold_path: weights/cls/k_fold
+  weight_path: weights/cls/swin_tiny_transformer.pth
   output: results/csv/classifier_result.csv
 
 crop:

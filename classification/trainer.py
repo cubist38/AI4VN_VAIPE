@@ -6,10 +6,12 @@ from utilities.dir import create_directory
 import os
 
 class PillTrainer:
-    def __init__(self, cfg: Dict, model, device, data_loaders = None) -> None:
+    def __init__(self, cfg: Dict, model, device, data_loaders = None, fold_id: int = None) -> None:
         self.cfg = cfg
         self.device = device
         self.model = model
+        self.loss_weights = torch.tensor(cfg['loss_weight']).to(self.device)
+        self.k_fold_id = fold_id
 
         if cfg['freeze']:
             print('Applying freeze model header!')
@@ -31,7 +33,7 @@ class PillTrainer:
         if data_loaders is not None:
             [self.train_loader, self.val_loader] = data_loaders
         
-        self.criterion = nn.BCELoss()
+        self.criterion = nn.BCELoss(reduction='none')
         self.best = 0
 
     def validate(self, loader, step: int, log = 'valid'):
@@ -53,6 +55,7 @@ class PillTrainer:
 
                 pred = self.model(img)
                 loss = self.criterion(pred, label)
+                loss = (loss * self.loss_weights).mean()
                 total_loss += loss.item()
                 predictions[idx:idx + batch_size, :] = torch.argmax(pred, 1).unsqueeze(-1)
                 true_labels[idx:idx + batch_size, :] = torch.argmax(label, 1).unsqueeze(-1)
@@ -88,6 +91,7 @@ class PillTrainer:
                 pred = self.model(img)
 
                 loss = self.criterion(pred, label)
+                loss = (loss * self.loss_weights).mean()
 
                 total_loss += loss.item()
                 avg_loss = total_loss/(it+1)
@@ -109,5 +113,6 @@ class PillTrainer:
 
     def save_model(self, path: str):
         create_directory(path)
-        torch.save(self.model.state_dict(), os.path.join(path, '{}.pth'.format(self.cfg['model_name'])))
+        model_name = self.cfg['model_name'] if self.k_fold_id == None else (self.cfg['model_name'] + f'_{self.k_fold_id}')
+        torch.save(self.model.state_dict(), os.path.join(path, '{}.pth'.format(model_name)))
         print('Saved cls model!')

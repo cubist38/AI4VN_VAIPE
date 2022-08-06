@@ -4,11 +4,14 @@ import os
 import yaml
 import cv2
 import json
+import shutil
 import pandas as pd
+import numpy as np
 
 from classification.test import get_prediction
 from classification.data_loader.utils import get_test_dataloader
 from classification.models.swin_transformer import swin_tiny_transformer
+from utilities.dir import create_directory
 
 def ocr():
     #TODO: implement this function
@@ -50,14 +53,31 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
 
 def classifier(classifier_cfg: Dict, device):
     test_loader = get_test_dataloader(classifier_cfg, classifier_cfg['test_img_dir'])
-
-    model = swin_tiny_transformer(classifier_cfg['num_classes'])
-    model.load_state_dict(torch.load(classifier_cfg['weight_path']))
-    print('Load model!')
-    model = model.to(device)
-
     image_names = os.listdir(classifier_cfg['test_img_dir'])
-    predictions, confidences = get_prediction(model, test_loader, device)
+
+    predictions, confidences = np.zeros(len(image_names)), np.zeros(len(image_names))
+    model = swin_tiny_transformer(classifier_cfg['num_classes'])
+    if not classifier_cfg['k_fold']:
+        model.load_state_dict(torch.load(classifier_cfg['weight_path']))
+        print('Load model ', classifier_cfg['weight_path'])
+        model = model.to(device)
+        predictions, confidences = get_prediction(model, test_loader, device)
+    else:
+        pred_vectors = np.zeros((len(image_names), classifier_cfg['num_classes']))
+        model_list = os.listdir(classifier_cfg['weight_k_fold_path'])
+        print(f'Found {len(model_list)} models!')
+        for model_name in model_list:
+            model_path = os.path.join(classifier_cfg['weight_k_fold_path'], model_name)
+            model.load_state_dict(torch.load(model_path))
+            print('Load model ', model_name)
+            model = model.to(device)
+            _pred_vectors = get_prediction(model, test_loader, device, get_predict_score=True)
+            pred_vectors = pred_vectors + _pred_vectors
+        
+        pred_vectors /= len(model_list)
+        predictions = np.argmax(pred_vectors, axis=1)
+        confidences = np.array([pred_vectors[idx, label] for idx, label in enumerate(predictions)])
+
     df = pd.DataFrame({'image_id': image_names, 'prediction': predictions, 'confidence': confidences})
     df.to_csv(classifier_cfg['output'])
 
@@ -66,6 +86,8 @@ def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
         Crop images based on bounding box, using in classifier.
     '''
     print('Running cropping ...', end = ' ')
+    shutil.rmtree(crop_cfg['crop_img_dir'], ignore_errors=True)
+    create_directory(crop_cfg['crop_img_dir'])
     crop_detection_map = {}
     for image_path, boxes in detection_results.items():
         image_name = image_path.split('/')[-1]
