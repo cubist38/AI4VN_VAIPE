@@ -8,14 +8,16 @@ import shutil
 import pandas as pd
 import numpy as np
 
+from ocr.pres_ocr import pres_ocr
 from classification.test import get_prediction
 from classification.data_loader.utils import get_test_dataloader
 from classification.models.swin_transformer import swin_tiny_transformer
 from utilities.dir import create_directory
 
-def ocr():
-    #TODO: implement this function
-    pass
+def run_ocr(image_dir: str, output_dir: str) -> Dict:
+    ocr_result = pres_ocr(image_dir=image_dir)
+    with open(output_dir, 'w', encoding='utf8') as f:
+        json.dump(ocr_result, f, ensure_ascii=False)
 
 def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yolov5') -> Dict:
     '''
@@ -142,19 +144,19 @@ def change_form(pill_pres_map):
     return pres_pill
 
 
-def map_to_final_result(results, ocr, pill_pres_map):
-    # results is result of step 1, ocr is result of step 2
+def map_to_final_result(od_results, ocr_result, pill_pres_map):
+    # od_results is result of step 1, ocr_result is result of step 2
     fin_res = {}
     
     pres_pill = change_form(pill_pres_map)
     
-    for key, value in ocr.items():
+    for key, value in ocr_result.items():
         for pill in pres_pill[key]:
             labels = []
-            if pill not in results:
+            if pill not in od_results:
                 print(f'Not found annotations on {pill}')
                 continue
-            for label in results[pill]:
+            for label in od_results[pill]:
                 if label['class_id'] not in value:
                     class_id = 107
                 else:
@@ -163,6 +165,7 @@ def map_to_final_result(results, ocr, pill_pres_map):
             fin_res[pill] = labels
     return fin_res
 
+
 # ==================== MAIN =======================
 if __name__ == '__main__':
     # Load config file
@@ -170,11 +173,11 @@ if __name__ == '__main__':
     device = torch.device(cfg['device'])
 
     # ocr -> run detection -> crop bbox images -> run classification
-    ocr()
-    detection_results = run_detection(cfg['image_dir'], cfg['detection'])
+    # Uncommend below line to run OCR (if neccesary)
+    # run_ocr(cfg['pres_image_dir'], output_dir=cfg['ocr']['output'])
+    detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
     crop_bbox_images(detection_results, cfg['crop'])
     classifier(cfg['classifier'], device)
-
 
     # generate submission
     print('Generating submit file ...', end = ' ')
@@ -189,9 +192,9 @@ if __name__ == '__main__':
         crop_detection_map = json.load(f)
     classifier_df = pd.read_csv(cfg['classifier']['output'])
 
-    ocr = text_to_vaipe_label(label_drugname, ocr_output_dict)
+    ocr_result = text_to_vaipe_label(label_drugname, ocr_output_dict)
 
-    results = {}
+    od_results = {}
     for i in range(len(classifier_df)):
         image_id = classifier_df['image_id'][i]
         prediction = classifier_df['prediction'][i]
@@ -206,12 +209,12 @@ if __name__ == '__main__':
             'class_id': prediction if confidence > cfg['classifier']['threshold'] else 107,
             'confidence_score': confidence
         }
-        if annotation['image_id'] not in results:
-            results[annotation['image_id']] = []
+        if annotation['image_id'] not in od_results:
+            od_results[annotation['image_id']] = []
         # print(annotation['image_id'])
-        results[annotation['image_id']].append(item)
+        od_results[annotation['image_id']].append(item)
 
-    fin_res = map_to_final_result(results, ocr, pill_pres_map)
+    fin_res = map_to_final_result(od_results, ocr_result, pill_pres_map)
 
     class_id = []
     x_min = []

@@ -82,7 +82,7 @@ from detection.run import do_detection
 
 image_folder = './personal_images'
 
-results = do_detection(image_folder, model_name='yolov5')
+results = do_detection(image_folder, batch_size=32, model_name='yolov5')
 
 for image, boxes in results.items():
     print(image)
