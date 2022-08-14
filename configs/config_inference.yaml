@@ -23,7 +23,7 @@ classifier:
   img_size: 256
   test_img_dir: data/crop_data
   backbone: swinv2_small_transformer
-  weight_ensemble_path: weights/cls/swinv2_small_remove_sample_kfold
+  weight_ensemble_path: weights/cls/swinv2_kfold
   weight_path: weights/cls/swinv2_small_transformer.pth
   output: results/csv/classifier_result.csv
 
