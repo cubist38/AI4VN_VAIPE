@@ -31,3 +31,9 @@ def resize_image(image: np.array, desired_size: int) -> np.array:
         value = [0, 0, 0])
 
     return resized
+
+def get_lr(optimizer):
+    lr_list = []
+    for param_group in optimizer.param_groups:
+        lr_list.append(param_group['lr'])
+    return lr_list

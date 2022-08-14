@@ -3,6 +3,7 @@ import torch
 from torch import optim, nn
 from tqdm import tqdm
 from utilities.dir import create_directory
+from .utils import get_lr
 import os
 
 class PillTrainer:
@@ -26,9 +27,16 @@ class PillTrainer:
 
         self.optimizer = optim.AdamW(param_groups, lr = cfg['lr'])
         # self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0 = 20, eta_min=1e-4)
-        self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, 
-                                                        milestones=cfg['optim']['milestone'],
-                                                        gamma=cfg['optim']['gamma'])
+        print('Using scheduler:', cfg['optim']['name'])
+        if cfg['optim']['name'] == 'CosineAnnealingWarmRestarts':
+            self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+                self.optimizer,
+                T_0=cfg['epochs'], T_mult=1, eta_min=cfg['optim']['lr_min'], last_epoch=-1
+            )
+        else:
+            self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, 
+                                                            milestones=cfg['optim']['milestone'],
+                                                            gamma=cfg['optim']['gamma'])
 
         if data_loaders is not None:
             [self.train_loader, self.val_loader] = data_loaders
@@ -81,7 +89,7 @@ class PillTrainer:
             if self.cfg['freeze'] and epoch == self.cfg['unfreeze_epoch']:
                 print('Unfreeze model header!')
                 self.model.net.unfreeze_header()
-            print(f'[*] Epoch: {epoch}')
+            print(f'[*] Epoch: {epoch} -------- Learning rate: {get_lr(self.optimizer)}')
             total_loss, avg_loss = 0, 0
             # pbar = tqdm(enumerate(self.train_loader), total = len(self.train_loader))
             for it, (img, label) in enumerate(self.train_loader):

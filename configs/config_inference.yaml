@@ -6,6 +6,8 @@ label_drugnames_path: results/label_drugnames.json
 pill_pres_map_path: data/public_test/pill_pres_map.json
 submit_file: results/csv/results.csv
 
+multi_models: False
+
 ocr:
   output: results/ocr_output.json
 
@@ -14,14 +16,27 @@ detection:
   weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_pill.pt
 
 classifier:
-  k_fold: True
+  ensemble: True
   threshold: 0.5
   num_classes: 107
-  batch_size: 32
-  img_size: 224
+  batch_size: 16
+  img_size: 256
   test_img_dir: data/crop_data
-  weight_k_fold_path: weights/cls/k_fold
-  weight_path: weights/cls/swin_tiny_transformer.pth
+  backbone: swinv2_small_transformer
+  weight_ensemble_path: weights/cls/swinv2_small_remove_sample_kfold
+  weight_path: weights/cls/swinv2_small_transformer.pth
+  output: results/csv/classifier_result.csv
+
+classifier_multi_models:
+  threshold: 0.5
+  num_classes: 107
+  batch_size: 16
+  num_models: 2
+  img_size: [224, 256]
+  test_img_dir: data/process_crop_data
+  backbone: [swin_tiny_transformer, swinv2_small_transformer]
+  weight_path: [weights/cls/swin_tiny_kfold, weights/cls/swinv2_small_kfold]
+  model_weight: [0.4, 0.6]
   output: results/csv/classifier_result.csv
 
 crop:

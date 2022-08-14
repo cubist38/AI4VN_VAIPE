@@ -8,14 +8,14 @@ import shutil
 import pandas as pd
 import numpy as np
 
-from ocr.pres_ocr import pres_ocr
+# from ocr.pres_ocr import pres_ocr
 from classification.test import get_prediction
 from classification.data_loader.utils import get_test_dataloader
-from classification.models.swin_transformer import swin_tiny_transformer
+from classification.models import swin_transformer_map
 from utilities.dir import create_directory
 
 def run_ocr(image_dir: str, output_dir: str) -> Dict:
-    ocr_result = pres_ocr(image_dir=image_dir)
+    # ocr_result = pres_ocr(image_dir=image_dir)
     with open(output_dir, 'w', encoding='utf8') as f:
         json.dump(ocr_result, f, ensure_ascii=False)
 
@@ -53,23 +53,56 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
     
     return detection_results
 
+def classifier_multi_models(cfg: Dict, device):
+    image_names = os.listdir(cfg['test_img_dir'])
+    total_pred_vectors = np.zeros((len(image_names), cfg['num_classes']))
+    for id in range(cfg['num_models']):
+        print('MODEL:', cfg['backbone'][id])
+        print('=' * 40)
+        backbone = cfg['backbone'][id]
+        cur_cfg = {
+            'img_size': cfg['img_size'][id],
+            'batch_size': cfg['batch_size'],
+        }
+        test_loader = get_test_dataloader(cur_cfg, cfg['test_img_dir'])
+        model = swin_transformer_map[backbone](cfg['num_classes'])
+
+        pred_vectors = np.zeros((len(image_names), cfg['num_classes']))
+        model_list = os.listdir(cfg['weight_path'][id])
+        print(f'Found {len(model_list)} models!')
+        for model_name in model_list:
+            model_path = os.path.join(cfg['weight_path'][id], model_name)
+            model.load_state_dict(torch.load(model_path))
+            print('Load model ', model_name)
+            model = model.to(device)
+            _pred_vectors = get_prediction(model, test_loader, device, get_predict_score=True)
+            pred_vectors = pred_vectors + _pred_vectors
+        
+        pred_vectors /= len(model_list)
+        total_pred_vectors += cfg['model_weight'][id] * pred_vectors
+
+    predictions = np.argmax(total_pred_vectors, axis=1)
+    confidences = np.array([total_pred_vectors[idx, label] for idx, label in enumerate(predictions)])
+    df = pd.DataFrame({'image_id': image_names, 'prediction': predictions, 'confidence': confidences})
+    df.to_csv(cfg['output'])
+
 def classifier(classifier_cfg: Dict, device):
     test_loader = get_test_dataloader(classifier_cfg, classifier_cfg['test_img_dir'])
     image_names = os.listdir(classifier_cfg['test_img_dir'])
 
     predictions, confidences = np.zeros(len(image_names)), np.zeros(len(image_names))
-    model = swin_tiny_transformer(classifier_cfg['num_classes'])
-    if not classifier_cfg['k_fold']:
+    model = swin_transformer_map[classifier_cfg['backbone']](classifier_cfg['num_classes'])
+    if not classifier_cfg['ensemble']:
         model.load_state_dict(torch.load(classifier_cfg['weight_path']))
         print('Load model ', classifier_cfg['weight_path'])
         model = model.to(device)
         predictions, confidences = get_prediction(model, test_loader, device)
     else:
         pred_vectors = np.zeros((len(image_names), classifier_cfg['num_classes']))
-        model_list = os.listdir(classifier_cfg['weight_k_fold_path'])
+        model_list = os.listdir(classifier_cfg['weight_ensemble_path'])
         print(f'Found {len(model_list)} models!')
         for model_name in model_list:
-            model_path = os.path.join(classifier_cfg['weight_k_fold_path'], model_name)
+            model_path = os.path.join(classifier_cfg['weight_ensemble_path'], model_name)
             model.load_state_dict(torch.load(model_path))
             print('Load model ', model_name)
             model = model.to(device)
@@ -175,9 +208,12 @@ if __name__ == '__main__':
     # ocr -> run detection -> crop bbox images -> run classification
     # Uncommend below line to run OCR (if neccesary)
     # run_ocr(cfg['pres_image_dir'], output_dir=cfg['ocr']['output'])
-    detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
-    crop_bbox_images(detection_results, cfg['crop'])
-    classifier(cfg['classifier'], device)
+    # detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
+    # crop_bbox_images(detection_results, cfg['crop'])
+    if cfg['multi_models']:
+        classifier_multi_models(cfg['classifier_multi_models'], device)
+    else:
+        classifier(cfg['classifier'], device)
 
     # generate submission
     print('Generating submit file ...', end = ' ')
@@ -199,6 +235,9 @@ if __name__ == '__main__':
         image_id = classifier_df['image_id'][i]
         prediction = classifier_df['prediction'][i]
         confidence = classifier_df['confidence'][i]
+        if image_id not in crop_detection_map:
+            print('WTF Not found any annotations in', image_id)
+            continue
         annotation = crop_detection_map[image_id]
         assert prediction < 107
         item = {
