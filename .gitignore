@@ -4,6 +4,7 @@
 *.zip
 *.rar
 *.tar
+data/yolov6_public_test/*.txt
 data/*.txt
 *.DS_Store
 
