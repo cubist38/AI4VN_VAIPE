@@ -4,6 +4,7 @@
 *.zip
 *.rar
 *.tar
+*.txt
 *.DS_Store
 
 # for personal testing, all personal files shouldn't be pushed
