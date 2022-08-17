@@ -28,10 +28,10 @@ class PillTrainer:
         self.optimizer = optim.AdamW(param_groups, lr = cfg['lr'])
         # self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0 = 20, eta_min=1e-4)
         print('Using scheduler:', cfg['optim']['name'])
-        if cfg['optim']['name'] == 'CosineAnnealingWarmRestarts':
-            self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+        if cfg['optim']['name'] == 'CosineAnnealingLR':
+            self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
                 self.optimizer,
-                T_0=cfg['epochs'], T_mult=1, eta_min=cfg['optim']['lr_min'], last_epoch=-1
+                T_max=cfg['epochs'], eta_min=cfg['optim']['lr_min'], last_epoch=-1
             )
         else:
             self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, 

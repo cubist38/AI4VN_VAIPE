@@ -1,1 +1,487 @@
-[{"label": 0, "drugnames": ["PARACETAMOL 500MG 500mg"]}, {"label": 1, "drugnames": ["TROYSAR AM 5mg +50mg", "TYDOL PM 500mg + 25mg"]}, {"label": 2, "drugnames": ["DIXIREIN 375mg", "Carbocistein (Anpemux) 250mg", "ANPEMUX 250mg"]}, {"label": 3, "drugnames": ["MEDIPLEX 800mg"]}, {"label": 4, "drugnames": ["BECOSEMID 40mg"]}, {"label": 5, "drugnames": ["SERGUROP 10mg"]}, {"label": 6, "drugnames": ["SADAPRON 300 300mg"]}, {"label": 7, "drugnames": ["STATRIPSINE 4,2mg", "ALFACHIM 4,2mg", "KATRYPSIN 4,2mg"]}, {"label": 8, "drugnames": ["CARDILOPIN 5mg", "PAMLONOR 5mg", "KAVASDIN 5 5mg", "AMCARDIA-5 5mg"]}, {"label": 9, "drugnames": ["AMOXYCILIN 250MG 0,25g"]}, {"label": 10, "drugnames": ["Amoxicilin (Fabamox 500) 500mg", "FABAMOX 500MG 500mg", "NOVOXIM-500 0,5g", "AMOXICILLIN 500MG 0,5g", "AMOXICILIN 500MG 500mg", "FABAMOX 500 500mg"]}, {"label": 11, "drugnames": ["ASPIRIN 81MG 81mg"]}, {"label": 12, "drugnames": ["INBACID 10 10mg", "LENINARTO 10 10mg"]}, {"label": 13, "drugnames": ["ATORIS 20MG 20mg"]}, {"label": 14, "drugnames": ["INBACID 10 10mg", "SERGUROP 10mg", "LENINARTO 10 10mg"]}, {"label": 15, "drugnames": ["ATORIS 20MG 20mg", "Đinh lăng, bạch quả (Hoạt huyết dưỡng não) 150mg+20mg", "Atorvastatin (Atoris 20mg) 20mg"]}, {"label": 16, "drugnames": ["AVARINO 60mg+300mg"]}, {"label": 17, "drugnames": ["CEFIXIM 200 200mg"]}, {"label": 18, "drugnames": ["Bố GAN P/H 125mg+100mg+25mg"]}, {"label": 19, "drugnames": ["CEFADROXIL 500MG 0,5g", "CEFADROXIL 0,5g", "DROXICEF 500MG 0,5g", "CEFADROXIL 500MG 500mg", "DROXICEF 0,5g"]}, {"label": 20, "drugnames": ["TIOGA 33,33mg+1g+0,34g+0,25g+0,17g"]}, {"label": 21, "drugnames": ["DIXIREIN 375mg"]}, {"label": 22, "drugnames": ["CARDILOPIN 5mg"]}, {"label": 23, "drugnames": ["CARUDXAN 2mg"]}, {"label": 24, "drugnames": ["XITORAN 0,5g", "CEFADROXIL 500MG 0,5g", "CEFADROXIL 0,5g"]}, {"label": 25, "drugnames": ["CEPHALEXIN 250MG 0,25g"]}, {"label": 26, "drugnames": ["CEPHALEXIN PMP 500 0,5g", "Cefalexin (Firstlexin 500) 0,5g", "CEFACYL 500 0,5g", "HAPENXIN CAPSULES 0,5g"]}, {"label": 27, "drugnames": ["INGARON 200 DST 200mg"]}, {"label": 28, "drugnames": ["ALFACHIM 4,2mg"]}, {"label": 29, "drugnames": ["Chlorpheniramin (hydrogen maleat) (Clorpheniramin) 4mg", "CLORPHENIRAMIN 4mg"]}, {"label": 30, "drugnames": ["COLCHICIN 1mg", "GOUTCOLCIN 1mg"]}, {"label": 31, "drugnames": ["SAVI PROLOL 5 5mg"]}, {"label": 32, "drugnames": ["COSYNDO B 175mg+175mg+125mcg"]}, {"label": 33, "drugnames": ["BLOZA 50mg"]}, {"label": 34, "drugnames": ["FUDCIME 200MG 200mg"]}, {"label": 35, "drugnames": ["CHORLATCYN 125mg+50mg+50mg+25mg"]}, {"label": 36, "drugnames": ["DROMASM FORT 80mg", "Drotaverin clohydrat (Dromasm fort) 80mg"]}, {"label": 37, "drugnames": ["DIAMICRON MR TAB 60MG 30'S 60mg", "GOLDDICRON 30mg", "PYME DIAPRO MR 30mg", "Gliclazid (Golddicron) 30mg", "DIAMICRON MR TAB 30MG 60'S 30mg"]}, {"label": 38, "drugnames": ["LAZIBET MR 60 60mg", "GLUZITOP MR 60 60mg"]}, {"label": 39, "drugnames": ["DICLOFENAC 50mg"]}, {"label": 40, "drugnames": ["MEZAFEN 60mg", "Loxoprofen (Mezafen) 60mg", "DICLOFENAC 50mg"]}, {"label": 41, "drugnames": ["SAVIPROLOL 2,5 2,5mg", "Bisoprolol (SaviProlol 2,5) 2,5mg"]}, {"label": 42, "drugnames": ["Gliclazid (Golddicron) 30mg", "DOROCRON - MR 30mg"]}, {"label": 43, "drugnames": ["CEFADROXIL 500MG 0,5g", "CEFADROXIL 0,5g", "XITORAN 0,5g", "DROXICEF 500MG 0,5g", "CEFADROXIL 500MG 500mg", "DROXICEF 0,5g"]}, {"label": 44, "drugnames": ["DƯỠNG TÂM AN THẦN"]}, {"label": 45, "drugnames": ["Enalapril thydrochlorothiazide (Ebitac 12.5) 10mg + 12,5mg", "EBITAC 12.5 10mg + 12,5mg"]}, {"label": 46, "drugnames": ["ENALAPRIL 5mg"]}, {"label": 47, "drugnames": ["RENAPRIL 5MG 5mg"]}, {"label": 48, "drugnames": ["DROMASM FORT 80mg", "Drotaverin clohydrat (Dromasm fort) 80mg"]}, {"label": 49, "drugnames": ["FABAMOX 500MG 500mg"]}, {"label": 50, "drugnames": ["FAMOGAST 40mg"]}, {"label": 51, "drugnames": ["METRONIDAZOL 250mg", "Metronidazol (Metronidazol 250) 250 mg", "METRONIDAZOL 250 250mg"]}, {"label": 52, "drugnames": ["MEDIBOGAN 200mg + 150mg + 16mg"]}, {"label": 53, "drugnames": ["GLUCOFAST 850 850mg"]}, {"label": 54, "drugnames": ["METFORMIN 500 500mg", "Metformin (Metformin 500) 500mg", "GLUCOFAST 500 500mg"]}, {"label": 55, "drugnames": ["MEGLUCON TAB 850MG 3X10'S 850mg", "GLUCOFAST 850 850mg"]}, {"label": 56, "drugnames": ["MEGLUCON 1000 1000mg", "Metformin (Meglucon 1000) 1000 mg"]}, {"label": 57, "drugnames": ["GLUCOFAST 850 850mg"]}, {"label": 58, "drugnames": ["FIBROFIN-145 145mg"]}, {"label": 59, "drugnames": ["BROMHEXIN ACTAVIS 8mg", "BROMHEXIN ACTAVIS 8MG 8mg"]}, {"label": 60, "drugnames": ["PARACETAMOL 500MG 500mg", "TYDOL PM 500mg + 25mg"]}, {"label": 61, "drugnames": ["HAPENXIN CAPSULES 0,5g", "Cefalexin (Firstlexin 500) 0,5g", "CEFACYL 500 0,5g"]}, {"label": 62, "drugnames": ["KAHAGAN 0,1g+0,075g+0,075g"]}, {"label": 63, "drugnames": ["BROMHEXIN ACTAVIS 8mg", "BROMHEXIN ACTAVIS 8MG 8mg"]}, {"label": 64, "drugnames": ["Atorvastatin (Atoris 20mg) 20mg", "HOẠT HUYẾT DƯỠNG NÃO BDF 150mg+5mg", "Đinh lăng, bạch quả (Hoạt huyết dưỡng não) 150mg+20mg", "HOẠT HUYẾT DƯỠNG NÃO 150mg+20mg", "HOẠT HUYẾT DƯỠNG NÃO QN 150mg+20mg"]}, {"label": 65, "drugnames": ["BỐ HUYẾT ÍCH NÃO BDF 40mg+300mg"]}, {"label": 66, "drugnames": ["KAGASDINE 20mg"]}, {"label": 67, "drugnames": ["Kim tiền thảo, râu ngô (Kim tiền thảo) 120mg+35mg"]}, {"label": 68, "drugnames": ["LIVONIC 2500mg+400mg+500mg+85mg"]}, {"label": 69, "drugnames": ["GAPHYTON S 100mg+75mg+7,5mg"]}, {"label": 70, "drugnames": ["SERGUROP 10mg", "VACO LORATADINE 10mg", "Loratadin (Sergurop) 10mg"]}, {"label": 71, "drugnames": ["VACO LORATADINE 10mg"]}, {"label": 72, "drugnames": ["SAVILOSARTAN 50 50mg", "SAVI LOSARTAN 50 50mg"]}, {"label": 73, "drugnames": ["MENISON 16MG 16mg", "METHYLSOLONE 16MG 16mg", "VIPREDNI 16MG 16mg"]}, {"label": 74, "drugnames": ["Methyl prednisolon (Methylprednisolon 4) 4mg", "METHYLPREDNISOLON 4 4mg", "MENISON 4mg", "MENISON 4MG 4mg"]}, {"label": 75, "drugnames": ["MENISON 16MG 16mg", "VIPREDNI 16MG 16mg"]}, {"label": 76, "drugnames": ["Methyl prednisolon (Methylprednisolon 4) 4mg", "METHYLPREDNISOLON 4 4mg"]}, {"label": 77, "drugnames": ["VIPREDNI 16MG 16mg"]}, {"label": 78, "drugnames": ["MEZAFEN 60mg", "Loxoprofen (Mezafen) 60mg"]}, {"label": 79, "drugnames": ["HANGITOR PLUS 40mg+12,5mg", "Telmisartan % hydroclorothiazid (Hangitor plus) 40mg+12,5mg"]}, {"label": 80, "drugnames": ["MILURIT 300mg"]}, {"label": 81, "drugnames": ["OTDXICAM 7.5mg", "MELOXICAM 7,5mg"]}, {"label": 82, "drugnames": ["NOVOXIM-500 0,5g"]}, {"label": 83, "drugnames": ["THANH NHIỆT TIÊU ĐỘC LIVERGOOD"]}, {"label": 84, "drugnames": ["NIFEDIPIN T20 STADA RETARD 20mg", "NIFEDIPIN HASAN 20 RETARD 20mg"]}, {"label": 85, "drugnames": ["NORMAGUT 250mg"]}, {"label": 86, "drugnames": ["Olanzapin 10mg (Olanxol)"]}, {"label": 87, "drugnames": ["Omeprazol (Kagasdine) 20mg", "KAGASDINE 20mg"]}, {"label": 88, "drugnames": ["PANACTOL 500mg"]}, {"label": 89, "drugnames": ["PANACTOL 500mg", "PARTAMOL TAB. 500mg", "PARACETAMOL 500MG 500mg", "MYPARA 500 500mg", "Paracetamol (Partamol Tab.) 500mg"]}, {"label": 90, "drugnames": ["PANACTOL 500mg", "PARTAMOL TAB. 500mg", "MYPARA 500 500mg"]}, {"label": 91, "drugnames": ["PANACTOL 500mg", "PARTAMOL TAB. 500mg", "PARACETAMOL 500MG 500mg", "MYPARA 500 500mg", "Paracetamol (Partamol Tab.) 500mg"]}, {"label": 92, "drugnames": ["STACETAM 800MG 800mg"]}, {"label": 93, "drugnames": ["PRAZOPRO 40mg"]}, {"label": 94, "drugnames": ["SPASVINA 40mg"]}, {"label": 95, "drugnames": ["VENRUTINE 100mg +500mg"]}, {"label": 96, "drugnames": ["SAVI ACARBOSE 100 100mg"]}, {"label": 97, "drugnames": ["CHORLATCYN 125mg+50mg+50mg+25mg", "CHORLATCYN 125mg;50mg;50mg;25mg"]}, {"label": 98, "drugnames": ["ALVERIN 40mg"]}, {"label": 99, "drugnames": ["PANACTOL 500mg", "PARTAMOL TAB. 500mg", "MYPARA 500 500mg", "PARACETAMOL 500MG 500mg", "Paracetamol (Partamol Tab.) 500mg"]}, {"label": 100, "drugnames": ["SETBLOOD 115mg+100mg+50mcg"]}, {"label": 101, "drugnames": ["TYDOL PM 500mg + 25mg"]}, {"label": 102, "drugnames": ["VENRUTINE 100mg +500mg"]}, {"label": 103, "drugnames": ["VITAMINAD 2500ui+200ui", "VINA-AD 2000ui+ 400ui"]}, {"label": 104, "drugnames": ["SAVI 3B 100mg+100mg+0,15mg", "Vitamin b1 + b6 + b12 (Savi 3B) 100mg+100mg+0,15mg", "COSYNDO B 175mg+175mg+125mcg", "SETBLOOD 115mg+100mg+50mcg", "COSYNDO B 175mg+175mg+125mg"]}, {"label": 105, "drugnames": ["VITAMIN C STADA 1G 1g"]}, {"label": 106, "drugnames": ["C1000 FLOODE 1g"]}]
+{
+    "SERGUROP 10mg": [
+        5,
+        70,
+        14
+    ],
+    "Amoxicilin (Fabamox 500) 500mg": [
+        10
+    ],
+    "Omeprazol (Kagasdine) 20mg": [
+        87
+    ],
+    "DƯỠNG TÂM AN THẦN": [
+        44
+    ],
+    "DOROCRON - MR 30mg": [
+        42
+    ],
+    "KAVASDIN 5 5mg": [
+        8
+    ],
+    "CEPHALEXIN PMP 500 0,5g": [
+        26
+    ],
+    "ATORIS 20MG 20mg": [
+        13,
+        15
+    ],
+    "GLUZITOP MR 60 60mg": [
+        38
+    ],
+    "NIFEDIPIN T20 STADA RETARD 20mg": [
+        84
+    ],
+    "TYDOL PM 500mg + 25mg": [
+        1,
+        60,
+        101
+    ],
+    "SAVI 3B 100mg+100mg+0,15mg": [
+        104
+    ],
+    "Metronidazol (Metronidazol 250) 250 mg": [
+        51
+    ],
+    "BROMHEXIN ACTAVIS 8mg": [
+        59,
+        63
+    ],
+    "MILURIT 300mg": [
+        80
+    ],
+    "Gliclazid (Golddicron) 30mg": [
+        42,
+        37
+    ],
+    "Cefalexin (Firstlexin 500) 0,5g": [
+        26,
+        61
+    ],
+    "NORMAGUT 250mg": [
+        85
+    ],
+    "BROMHEXIN ACTAVIS 8MG 8mg": [
+        59,
+        63
+    ],
+    "Bố GAN P/H 125mg+100mg+25mg": [
+        18
+    ],
+    "MYPARA 500 500mg": [
+        99,
+        89,
+        90,
+        91
+    ],
+    "SETBLOOD 115mg+100mg+50mcg": [
+        104,
+        100
+    ],
+    "CEFADROXIL 500MG 0,5g": [
+        24,
+        19,
+        43
+    ],
+    "LAZIBET MR 60 60mg": [
+        38
+    ],
+    "MEDIPLEX 800mg": [
+        3
+    ],
+    "THANH NHIỆT TIÊU ĐỘC LIVERGOOD": [
+        83
+    ],
+    "PAMLONOR 5mg": [
+        8
+    ],
+    "SADAPRON 300 300mg": [
+        6
+    ],
+    "VIPREDNI 16MG 16mg": [
+        73,
+        75,
+        77
+    ],
+    "COLCHICIN 1mg": [
+        30
+    ],
+    "ALFACHIM 4,2mg": [
+        28,
+        7
+    ],
+    "Olanzapin 10mg (Olanxol)": [
+        86
+    ],
+    "Paracetamol (Partamol Tab.) 500mg": [
+        99,
+        89,
+        91
+    ],
+    "COSYNDO B 175mg+175mg+125mg": [
+        104
+    ],
+    "MENISON 4MG 4mg": [
+        74
+    ],
+    "MEGLUCON 1000 1000mg": [
+        56
+    ],
+    "SPASVINA 40mg": [
+        94
+    ],
+    "Telmisartan % hydroclorothiazid (Hangitor plus) 40mg+12,5mg": [
+        79
+    ],
+    "KATRYPSIN 4,2mg": [
+        7
+    ],
+    "METRONIDAZOL 250mg": [
+        51
+    ],
+    "HOẠT HUYẾT DƯỠNG NÃO BDF 150mg+5mg": [
+        64
+    ],
+    "SAVI PROLOL 5 5mg": [
+        31
+    ],
+    "PANACTOL 500mg": [
+        99,
+        88,
+        89,
+        90,
+        91
+    ],
+    "CEFACYL 500 0,5g": [
+        26,
+        61
+    ],
+    "HOẠT HUYẾT DƯỠNG NÃO QN 150mg+20mg": [
+        64
+    ],
+    "VENRUTINE 100mg +500mg": [
+        102,
+        95
+    ],
+    "SAVILOSARTAN 50 50mg": [
+        72
+    ],
+    "FIBROFIN-145 145mg": [
+        58
+    ],
+    "DIXIREIN 375mg": [
+        2,
+        21
+    ],
+    "HANGITOR PLUS 40mg+12,5mg": [
+        79
+    ],
+    "FUDCIME 200MG 200mg": [
+        34
+    ],
+    "CEFADROXIL 0,5g": [
+        24,
+        43,
+        19
+    ],
+    "AMCARDIA-5 5mg": [
+        8
+    ],
+    "FABAMOX 500MG 500mg": [
+        49,
+        10
+    ],
+    "FAMOGAST 40mg": [
+        50
+    ],
+    "MELOXICAM 7,5mg": [
+        81
+    ],
+    "HOẠT HUYẾT DƯỠNG NÃO 150mg+20mg": [
+        64
+    ],
+    "BỐ HUYẾT ÍCH NÃO BDF 40mg+300mg": [
+        65
+    ],
+    "GLUCOFAST 500 500mg": [
+        54
+    ],
+    "PARACETAMOL 500MG 500mg": [
+        0,
+        99,
+        89,
+        91,
+        60
+    ],
+    "KAGASDINE 20mg": [
+        66,
+        87
+    ],
+    "Methyl prednisolon (Methylprednisolon 4) 4mg": [
+        74,
+        76
+    ],
+    "Metformin (Meglucon 1000) 1000 mg": [
+        56
+    ],
+    "Loratadin (Sergurop) 10mg": [
+        70
+    ],
+    "Kim tiền thảo, râu ngô (Kim tiền thảo) 120mg+35mg": [
+        67
+    ],
+    "GAPHYTON S 100mg+75mg+7,5mg": [
+        69
+    ],
+    "NIFEDIPIN HASAN 20 RETARD 20mg": [
+        84
+    ],
+    "MENISON 4mg": [
+        74
+    ],
+    "COSYNDO B 175mg+175mg+125mcg": [
+        104,
+        32
+    ],
+    "NOVOXIM-500 0,5g": [
+        10,
+        82
+    ],
+    "AMOXICILIN 500MG 500mg": [
+        10
+    ],
+    "TROYSAR AM 5mg +50mg": [
+        1
+    ],
+    "BLOZA 50mg": [
+        33
+    ],
+    "PARTAMOL TAB. 500mg": [
+        89,
+        91,
+        99,
+        90
+    ],
+    "PRAZOPRO 40mg": [
+        93
+    ],
+    "HAPENXIN CAPSULES 0,5g": [
+        26,
+        61
+    ],
+    "C1000 FLOODE 1g": [
+        106
+    ],
+    "BECOSEMID 40mg": [
+        4
+    ],
+    "METHYLPREDNISOLON 4 4mg": [
+        74,
+        76
+    ],
+    "VACO LORATADINE 10mg": [
+        70,
+        71
+    ],
+    "ALVERIN 40mg": [
+        98
+    ],
+    "MEGLUCON TAB 850MG 3X10'S 850mg": [
+        55
+    ],
+    "Đinh lăng, bạch quả (Hoạt huyết dưỡng não) 150mg+20mg": [
+        64,
+        15
+    ],
+    "METHYLSOLONE 16MG 16mg": [
+        73
+    ],
+    "DIAMICRON MR TAB 30MG 60'S 30mg": [
+        37
+    ],
+    "CEFIXIM 200 200mg": [
+        17
+    ],
+    "LIVONIC 2500mg+400mg+500mg+85mg": [
+        68
+    ],
+    "MENISON 16MG 16mg": [
+        73,
+        75
+    ],
+    "Drotaverin clohydrat (Dromasm fort) 80mg": [
+        48,
+        36
+    ],
+    "DROXICEF 0,5g": [
+        19,
+        43
+    ],
+    "GOUTCOLCIN 1mg": [
+        30
+    ],
+    "CHORLATCYN 125mg+50mg+50mg+25mg": [
+        97,
+        35
+    ],
+    "GLUCOFAST 850 850mg": [
+        57,
+        53,
+        55
+    ],
+    "STACETAM 800MG 800mg": [
+        92
+    ],
+    "SAVI LOSARTAN 50 50mg": [
+        72
+    ],
+    "TIOGA 33,33mg+1g+0,34g+0,25g+0,17g": [
+        20
+    ],
+    "PYME DIAPRO MR 30mg": [
+        37
+    ],
+    "ANPEMUX 250mg": [
+        2
+    ],
+    "Atorvastatin (Atoris 20mg) 20mg": [
+        64,
+        15
+    ],
+    "DROMASM FORT 80mg": [
+        48,
+        36
+    ],
+    "Loxoprofen (Mezafen) 60mg": [
+        40,
+        78
+    ],
+    "CEFADROXIL 500MG 500mg": [
+        19,
+        43
+    ],
+    "VITAMINAD 2500ui+200ui": [
+        103
+    ],
+    "RENAPRIL 5MG 5mg": [
+        47
+    ],
+    "INGARON 200 DST 200mg": [
+        27
+    ],
+    "CLORPHENIRAMIN 4mg": [
+        29
+    ],
+    "EBITAC 12.5 10mg + 12,5mg": [
+        45
+    ],
+    "METRONIDAZOL 250 250mg": [
+        51
+    ],
+    "MEDIBOGAN 200mg + 150mg + 16mg": [
+        52
+    ],
+    "FABAMOX 500 500mg": [
+        10
+    ],
+    "CHORLATCYN 125mg;50mg;50mg;25mg": [
+        97
+    ],
+    "Bisoprolol (SaviProlol 2,5) 2,5mg": [
+        41
+    ],
+    "DROXICEF 500MG 0,5g": [
+        19,
+        43
+    ],
+    "XITORAN 0,5g": [
+        24,
+        43
+    ],
+    "DIAMICRON MR TAB 60MG 30'S 60mg": [
+        37
+    ],
+    "Carbocistein (Anpemux) 250mg": [
+        2
+    ],
+    "VINA-AD 2000ui+ 400ui": [
+        103
+    ],
+    "Chlorpheniramin (hydrogen maleat) (Clorpheniramin) 4mg": [
+        29
+    ],
+    "Metformin (Metformin 500) 500mg": [
+        54
+    ],
+    "AMOXYCILIN 250MG 0,25g": [
+        9
+    ],
+    "SAVIPROLOL 2,5 2,5mg": [
+        41
+    ],
+    "LENINARTO 10 10mg": [
+        12,
+        14
+    ],
+    "CARUDXAN 2mg": [
+        23
+    ],
+    "CARDILOPIN 5mg": [
+        8,
+        22
+    ],
+    "VITAMIN C STADA 1G 1g": [
+        105
+    ],
+    "METFORMIN 500 500mg": [
+        54
+    ],
+    "STATRIPSINE 4,2mg": [
+        7
+    ],
+    "ENALAPRIL 5mg": [
+        46
+    ],
+    "SAVI ACARBOSE 100 100mg": [
+        96
+    ],
+    "KAHAGAN 0,1g+0,075g+0,075g": [
+        62
+    ],
+    "DICLOFENAC 50mg": [
+        40,
+        39
+    ],
+    "OTDXICAM 7.5mg": [
+        81
+    ],
+    "Enalapril thydrochlorothiazide (Ebitac 12.5) 10mg + 12,5mg": [
+        45
+    ],
+    "AVARINO 60mg+300mg": [
+        16
+    ],
+    "CEPHALEXIN 250MG 0,25g": [
+        25
+    ],
+    "ASPIRIN 81MG 81mg": [
+        11
+    ],
+    "INBACID 10 10mg": [
+        12,
+        14
+    ],
+    "AMOXICILLIN 500MG 0,5g": [
+        10
+    ],
+    "Vitamin b1 + b6 + b12 (Savi 3B) 100mg+100mg+0,15mg": [
+        104
+    ],
+    "MEZAFEN 60mg": [
+        40,
+        78
+    ],
+    "GOLDDICRON 30mg": [
+        37
+    ]
+}

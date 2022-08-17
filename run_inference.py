@@ -12,12 +12,63 @@ import numpy as np
 from classification.test import get_prediction
 from classification.data_loader.utils import get_test_dataloader
 from classification.models import swin_transformer_map
+from segmentation.inference import get_mask_v2, get_cfg, DefaultPredictor, model_zoo
 from utilities.dir import create_directory
+from utilities.metric import get_iou
 
 def run_ocr(image_dir: str, output_dir: str) -> Dict:
     # ocr_result = pres_ocr(image_dir=image_dir)
     with open(output_dir, 'w', encoding='utf8') as f:
         json.dump(ocr_result, f, ensure_ascii=False)
+
+def remove_background(masks: np.array, image: np.array, bbox1):
+    def get_bbox_from_seg(mask):
+        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        points = contours[0]
+        x_points, y_points = [], []
+        for point in points:
+            x_points.append(int(point[0][0]))
+            y_points.append(int(point[0][1]))
+        bbox = {
+            'x1': min(x_points),
+            'y1': min(y_points),
+            'x2': max(x_points),
+            'y2': max(y_points)
+        }
+        return bbox
+
+    largest_iou = 0
+    output = None
+    for mask in masks:
+        mask = mask.astype(np.uint8).copy()
+        bbox2 = get_bbox_from_seg(mask)
+        iou = get_iou(bbox1, bbox2)
+        if largest_iou < iou:
+            output = mask
+            largest_iou = iou
+
+    if isinstance(output, type(None)) or largest_iou < 0.4:
+        print('[E] This image goes shitty.')
+        crop_image = image[bbox1['y1']:bbox1['y2'], bbox1['x1']:bbox1['x2']]
+    else:
+        output[output > 0] = 255
+        mask_3d = np.stack((output,output,output),axis=-1)    
+        crop_image = cv2.bitwise_and(image, mask_3d)
+        crop_image = crop_image[bbox1['y1']:bbox1['y2'], bbox1['x1']:bbox1['x2']]
+
+    H, W = crop_image.shape[:2]
+    assert(H <= 300 and W <= 300), f'H: {H}, W: {W}'
+    delta_w = 300 - W
+    delta_h = 300 - H
+    top, bottom = delta_h//2, delta_h-(delta_h//2)
+    left, right = delta_w//2, delta_w-(delta_w//2)
+
+    # padding image with black pixel
+    crop_image = cv2.copyMakeBorder(crop_image, top, bottom, left, right, cv2.BORDER_CONSTANT,
+            value = [0, 0, 0])
+
+    return crop_image
+
 
 def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yolov5') -> Dict:
     '''
@@ -35,8 +86,17 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
         for id, file in enumerate(image_files):
             print(f'[{id+1}/{len(image_files)}] Running on {file} ...')
             path = os.path.join(image_folder, file)
+            path_640 = os.path.join('data/public_test_640', file)
+
+            img = cv2.imread(path)
+            img_640 = cv2.imread(path_640)
+
+            H, W = img.shape[:2]
+            h, w = img_640.shape[:2]
+            del img, img_640
+
             model.conf = detection_cfg['model_conf']
-            outputs = model(path)
+            outputs = model(path_640)
             df = outputs.pandas().xyxy[0]
             xmins, ymins, xmaxs, ymaxs = df['xmin'], df['ymin'], df['xmax'], df['ymax']
             confs = df['confidence']
@@ -44,6 +104,16 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
             boxes = []
             for i in range(len(xmins)):
                 xmin, ymin, xmax, ymax = int(xmins[i]), int(ymins[i]), int(xmaxs[i]), int(ymaxs[i])
+                
+                xmin = int(xmin / w * W) 
+                ymin = int(ymin / h * H)
+                xmax = int(xmax / w * W)
+                ymax = int(ymax / h * H)
+                border = int(min(xmax-xmin, ymax-ymin) * 0.08)
+                xmin = max(0, xmin - border)
+                ymin = max(0, ymin - border)
+                xmax = min(W-1, xmax + border)
+                ymax = min(H-1, ymax + border)
                 conf, label = confs[i], labels[i]
                 boxes.append((xmin, ymin, xmax, ymax, label, conf))
             detection_results[path] = boxes
@@ -121,15 +191,38 @@ def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
         Crop images based on bounding box, using in classifier.
     '''
     print('Running cropping ...', end = ' ')
+    seg_cfg = yaml.safe_load(open('configs/config_segmentation.yaml'))
+    cfg = get_cfg()
+    cfg.merge_from_file(model_zoo.get_config_file(seg_cfg['model']))
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = seg_cfg['num_classes']
+    cfg.MODEL.WEIGHTS = os.path.join(seg_cfg['model_path'])
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = seg_cfg['threshold']
+    predictor = DefaultPredictor(cfg)
+
     shutil.rmtree(crop_cfg['crop_img_dir'], ignore_errors=True)
     create_directory(crop_cfg['crop_img_dir'])
     crop_detection_map = {}
-    for image_path, boxes in detection_results.items():
+    for id, (image_path, boxes) in enumerate(detection_results.items()):
+        print('[*] Cropping on', image_path)
         image_name = image_path.split('/')[-1]
+        image_path_640 = os.path.join('data/public_test_640', image_name)
+
         img = cv2.imread(image_path)
+        img_640 = cv2.imread(image_path_640)
+
+        H, W = img.shape[:2]
+        h, w = img_640.shape[:2]
+
+        masks = get_mask_v2(predictor, img_640)
         for id, box in enumerate(boxes):
             x_min, y_min, x_max, y_max, class_id, confidence_score = box
-            crop_img = img[y_min:y_max, x_min:x_max]
+            bbox = {
+                'x1': int(x_min / W * w),
+                'y1': int(y_min / H * h),
+                'x2': int(x_max / W * w),
+                'y2': int(y_max / H * h),
+            }
+            crop_img = remove_background(masks, img_640, bbox)
             crop_img_name = str(id) + '_' + image_name
             crop_detection_map[crop_img_name] = {
                 'image_id': image_name,
@@ -139,7 +232,8 @@ def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
                 'y_max': y_max,
             }
             cv2.imwrite(os.path.join(crop_cfg['crop_img_dir'], crop_img_name), crop_img)
-    
+        del img, img_640
+
     with open(crop_cfg['crop_detection_map'], "w") as f:
         json.dump(crop_detection_map, f)
     print('Done!')

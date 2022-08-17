@@ -55,7 +55,7 @@ if __name__ == '__main__':
             image_paths.append(os.path.join(cfg['img_src'], str(item['label']), item['image']))
             image_labels.append(item['label'])
     print(f'Found {len(image_labels)} images has label != 107')
-    image_paths, image_labels = remove_sample(image_paths, image_labels)
+    # image_paths, image_labels = remove_sample(image_paths, image_labels)
 
     cfg['trainer']['loss_weight'] = get_weighted_loss(image_labels)
 

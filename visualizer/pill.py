@@ -23,7 +23,7 @@ def apply_bbox(image: np.array, bbox_list: List[Dict], down_scale: bool = True) 
 
         # text
         (w, h), _ = cv2.getTextSize(label, FONT, FONT_SCALE, THICKNESS)
-        image = cv2.rectangle(image, (xmin, ymin - 100), (xmin + w, ymin), COLOR, -1)
+        image = cv2.rectangle(image, (xmin, ymin - 30), (xmin + w, ymin), COLOR, -1)
         image = cv2.putText(image, label, (xmin, ymin-10), FONT, FONT_SCALE, (255, 255, 255), THICKNESS, LINE)
 
     if down_scale:

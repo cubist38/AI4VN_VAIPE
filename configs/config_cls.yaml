@@ -2,29 +2,29 @@ batch_size: 16
 img_size: 256
 device: cuda:0
 
-img_src: data/process_data/labeled_pills
+img_src: data/process_data/new_labeled_pills
 unlabeled_img_src: data/crop_data
-data_dict: data/process_data/data_single_pills.json
+data_dict: data/process_data/new_data_single_pills.json
 num_classes: 107
 
-k_fold: 4 # > 0 to use k-fold
+k_fold: 0 # > 0 to use k-fold
 
 trainer:
-  epochs: 15
+  epochs: 20
   backbone: swinv2_small_transformer
   freeze: False
   unfreeze_epoch: 40
   log_step: 100
   eval_step: 9999
 
-  save_path: weights/cls/swinv2_small_remove_sample_kfold
-  model_name: swinv2_small_transformer
+  save_path: weights/cls
+  model_name: swinv2_small_transformer_remove_background
 
   lr: 0.0001
   cls_lr: 0.001
   
   optim:
-    name: 'MultiStepLR'
-    milestone: [8]
+    name: 'CosineAnnealingLR'
+    milestone: [8, 15]
     gamma: 0.1
-    lr_min: 0.00005
+    lr_min: 0.00001
