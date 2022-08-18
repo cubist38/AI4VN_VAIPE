@@ -1,7 +1,6 @@
 import cv2
 import os
 
-from paddle import crop
 from ocr.text_detector.my_detector import MyDetector
 from ocr.text_classifier.my_classifier import MyClassifier
 from utilities.prescription import *
@@ -19,8 +18,8 @@ def pres_ocr(image_dir: str, saved: bool = False) -> list:
             os.makedirs(result_folder)
 
     args = {
-        'det_model_dir': './ocr/text_detector/PaddleOCR/weights/ch_PP-OCRv3_det_infer',
-        'cls_model_dir': './ocr/text_classifier/vietocr/weights/seq2seq_finetuned.pth',
+        'det_model_dir': './weights/ocr/ch_PP-OCRv3_det_infer',
+        'cls_model_dir': './weights/ocr/seq2seq_finetuned.pth',
         'cls_model_name': 'vgg_seq2seq'
     }
     
