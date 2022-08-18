@@ -1,0 +1,11 @@
+# run_inference.py requirements
+# Usage: pip install -r requirements.txt
+
+
+# Test-Time-Augmentation (TTA)
+
+ensemble-boxes
+
+# Classification
+
+timm

@@ -1,3 +1,4 @@
+augment_dir: data/augment
 pill_image_dir: data/public_test/pill/image
 pres_image_dir: data/public_test/prescription/image
 device: 'cuda:0'
@@ -6,26 +7,12 @@ label_drugnames_path: results/label_drugnames.json
 pill_pres_map_path: data/public_test/pill_pres_map.json
 submit_file: results/csv/results.csv
 
-multi_models: False
-
 ocr:
   output: results/ocr_output.json
 
 detection:
   model_conf: 0.2
-  weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_pill.pt
-
-classifier:
-  ensemble: True
-  threshold: 0.5
-  num_classes: 107
-  batch_size: 16
-  img_size: 256
-  test_img_dir: data/crop_data
-  backbone: swinv2_small_transformer
-  weight_ensemble_path: weights/cls/swinv2_kfold
-  weight_path: weights/cls/swinv2_small_transformer.pth
-  output: results/csv/classifier_result.csv
+  weight_path: detection/yolo/yolov5/runs/train/exp/best.pt
 
 classifier_multi_models:
   threshold: 0.5
