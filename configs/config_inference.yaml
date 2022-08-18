@@ -12,7 +12,8 @@ ocr:
 
 detection:
   model_conf: 0.2
-  weight_path: detection/yolo/yolov5/runs/train/exp/best.pt
+  # weight_path: detection/yolo/yolov5/runs/train/exp/best.pt
+  weight_path: weights/detection/best.pt
 
 classifier_multi_models:
   threshold: 0.5
