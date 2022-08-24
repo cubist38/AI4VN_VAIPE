@@ -3,13 +3,16 @@ import torch
 from torch import optim, nn
 from tqdm import tqdm
 from utilities.dir import create_directory
+from .utils import get_lr
 import os
 
 class PillTrainer:
-    def __init__(self, cfg: Dict, model, device, data_loaders = None) -> None:
+    def __init__(self, cfg: Dict, model, device, data_loaders = None, fold_id: int = None) -> None:
         self.cfg = cfg
         self.device = device
         self.model = model
+        self.loss_weights = torch.tensor(cfg['loss_weight']).to(self.device)
+        self.k_fold_id = fold_id
 
         if cfg['freeze']:
             print('Applying freeze model header!')
@@ -24,14 +27,21 @@ class PillTrainer:
 
         self.optimizer = optim.AdamW(param_groups, lr = cfg['lr'])
         # self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0 = 20, eta_min=1e-4)
-        self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, 
-                                                        milestones=cfg['optim']['milestone'],
-                                                        gamma=cfg['optim']['gamma'])
+        print('Using scheduler:', cfg['optim']['name'])
+        if cfg['optim']['name'] == 'CosineAnnealingLR':
+            self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
+                self.optimizer,
+                T_max=cfg['epochs'], eta_min=cfg['optim']['lr_min'], last_epoch=-1
+            )
+        else:
+            self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, 
+                                                            milestones=cfg['optim']['milestone'],
+                                                            gamma=cfg['optim']['gamma'])
 
         if data_loaders is not None:
             [self.train_loader, self.val_loader] = data_loaders
         
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.BCELoss(reduction='none')
         self.best = 0
 
     def validate(self, loader, step: int, log = 'valid'):
@@ -53,9 +63,10 @@ class PillTrainer:
 
                 pred = self.model(img)
                 loss = self.criterion(pred, label)
+                loss = (loss * self.loss_weights).mean()
                 total_loss += loss.item()
                 predictions[idx:idx + batch_size, :] = torch.argmax(pred, 1).unsqueeze(-1)
-                true_labels[idx:idx + batch_size, :] = label.unsqueeze(-1)
+                true_labels[idx:idx + batch_size, :] = torch.argmax(label, 1).unsqueeze(-1)
 
                 idx += batch_size
 
@@ -78,7 +89,7 @@ class PillTrainer:
             if self.cfg['freeze'] and epoch == self.cfg['unfreeze_epoch']:
                 print('Unfreeze model header!')
                 self.model.net.unfreeze_header()
-            print(f'[*] Epoch: {epoch}')
+            print(f'[*] Epoch: {epoch} -------- Learning rate: {get_lr(self.optimizer)}')
             total_loss, avg_loss = 0, 0
             # pbar = tqdm(enumerate(self.train_loader), total = len(self.train_loader))
             for it, (img, label) in enumerate(self.train_loader):
@@ -88,6 +99,7 @@ class PillTrainer:
                 pred = self.model(img)
 
                 loss = self.criterion(pred, label)
+                loss = (loss * self.loss_weights).mean()
 
                 total_loss += loss.item()
                 avg_loss = total_loss/(it+1)
@@ -109,5 +121,6 @@ class PillTrainer:
 
     def save_model(self, path: str):
         create_directory(path)
-        torch.save(self.model.state_dict(), os.path.join(path, '{}.pth'.format(self.cfg['model_name'])))
+        model_name = self.cfg['model_name'] if self.k_fold_id == None else (self.cfg['model_name'] + f'_{self.k_fold_id}')
+        torch.save(self.model.state_dict(), os.path.join(path, '{}.pth'.format(model_name)))
         print('Saved cls model!')

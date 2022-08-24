@@ -26,26 +26,8 @@ class SwinTransformer(nn.Module):
         x = self.classify(x)
         return x
 
-def swin_tiny_transformer(num_classes: int, pretrained=True):
+def swinv2_small_transformer(num_classes: int, pretrained=True):
     if pretrained:
         print('Using pretrained model!')
-    model = SwinTransformer(num_classes, 'swin_tiny_patch4_window7_224', pretrained)
-    return model
-
-def swin_small_transformer(num_classes: int, pretrained=True):
-    if pretrained:
-        print('Using pretrained model!')
-    model = SwinTransformer(num_classes, 'swin_small_patch4_window7_224', pretrained)
-    return model
-
-def swin_base_transformer_384(num_classes: int, pretrained=True):
-    if pretrained:
-        print('Using pretrained model!')
-    model = SwinTransformer(num_classes, 'swin_base_patch4_window12_384', pretrained)
-    return model
-
-def swin_large_transformer(num_classes: int, pretrained=True):
-    if pretrained:
-        print('Using pretrained model!')
-    model = SwinTransformer(num_classes, 'swin_large_patch4_window7_224', pretrained)
+    model = SwinTransformer(num_classes, 'swinv2_small_window8_256', pretrained)
     return model

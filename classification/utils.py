@@ -19,15 +19,21 @@ def resize_image(image: np.array, desired_size: int) -> np.array:
     ratio = float(desired_size)/max(old_size)
     new_size = tuple([int(x*ratio) for x in old_size])
 
-    image = cv2.resize(image, (new_size[1], new_size[0]))
+    image = cv2.resize(image, (desired_size, desired_size))
 
-    delta_w = desired_size - new_size[1]
-    delta_h = desired_size - new_size[0]
-    top, bottom = delta_h//2, delta_h-(delta_h//2)
-    left, right = delta_w//2, delta_w-(delta_w//2)
+    # delta_w = desired_size - new_size[1]
+    # delta_h = desired_size - new_size[0]
+    # top, bottom = delta_h//2, delta_h-(delta_h//2)
+    # left, right = delta_w//2, delta_w-(delta_w//2)
 
-    # padding image with black pixel
-    resized = cv2.copyMakeBorder(image, top, bottom, left, right, cv2.BORDER_CONSTANT,
-        value = [0, 0, 0])
+    # # padding image with black pixel
+    # resized = cv2.copyMakeBorder(image, top, bottom, left, right, cv2.BORDER_CONSTANT,
+    #     value = [0, 0, 0])
 
-    return resized
+    return image
+
+def get_lr(optimizer):
+    lr_list = []
+    for param_group in optimizer.param_groups:
+        lr_list.append(param_group['lr'])
+    return lr_list

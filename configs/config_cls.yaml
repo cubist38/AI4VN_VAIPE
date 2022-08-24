@@ -1,24 +1,30 @@
-batch_size: 32
-img_size: 224
+batch_size: 16
+img_size: 512
 device: cuda:0
-img_src: data/label/single_pill
-data_dict: data/label/single_pill.json
+
+img_src: data/classifier_data/single_pill
+unlabeled_img_src: data/crop_data
+data_dict: data/classifier_data/single_pill.json
 num_classes: 107
 
+k_fold: 0 # > 0 to use k-fold
+
 trainer:
-  epochs: 20
-  backbone: swin_tiny_transformer
+  epochs: 16
+  backbone: resnext50_32x4d
   freeze: False
   unfreeze_epoch: 40
   log_step: 100
   eval_step: 9999
 
-  save_path: weights/cls
-  model_name: swin_tiny_cls
+  save_path: weights/cls/swinv2_interpolation_kfold
+  model_name: resnext50_32x4d
 
   lr: 0.0001
   cls_lr: 0.001
-
+  
   optim:
-    milestone: [10]
+    name: 'CosineAnnealingLR'
+    milestone: [8]
     gamma: 0.1
+    lr_min: 0.00001
