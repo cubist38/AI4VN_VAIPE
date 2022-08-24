@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 
 from utilities.seed import seed_torch
 from classification.data_loader.utils import get_dataloader
-from classification.models import swin_transformer_map
+from classification.models import arch_map
 from classification.trainer import PillTrainer
 
 def train_single_fold(fold_id: int, X_train, X_test, y_train, y_test, model, device, cfg: Dict):
@@ -55,14 +55,14 @@ if __name__ == '__main__':
             image_paths.append(os.path.join(cfg['img_src'], str(item['label']), item['image']))
             image_labels.append(item['label'])
     print(f'Found {len(image_labels)} images has label != 107')
-    image_paths, image_labels = remove_sample(image_paths, image_labels)
+    # image_paths, image_labels = remove_sample(image_paths, image_labels)
 
     cfg['trainer']['loss_weight'] = get_weighted_loss(image_labels)
 
     if cfg['k_fold'] == 0:
         print('Not using k-fold')
         print('Model:', cfg['trainer']['backbone'])
-        model = swin_transformer_map[cfg['trainer']['backbone']](cfg['num_classes'])
+        model = arch_map[cfg['trainer']['backbone']](cfg['num_classes'])
         model = model.to(device)
         X_train, X_test, y_train, y_test = train_test_split(image_paths, image_labels, 
                                                         test_size=0.3, random_state=2022)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
             print('=' * 30)
             print(f'TRAINING FOLD {fold_id}')
 
-            model = swin_transformer_map[cfg['trainer']['backbone']](cfg['num_classes'])
+            model = arch_map[cfg['trainer']['backbone']](cfg['num_classes'])
             model = model.to(device)
             train_single_fold(fold_id, X_train, X_test, y_train, y_test, model, device, cfg)
             del model

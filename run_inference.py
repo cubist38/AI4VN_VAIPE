@@ -11,7 +11,7 @@ import numpy as np
 # from ocr.pres_ocr import pres_ocr
 from classification.test import get_prediction
 from classification.data_loader.utils import get_test_dataloader
-from classification.models import swin_transformer_map
+from classification.models import arch_map
 from utilities.dir import create_directory
 
 def run_ocr(image_dir: str, output_dir: str) -> Dict:
@@ -35,6 +35,8 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
         for id, file in enumerate(image_files):
             print(f'[{id+1}/{len(image_files)}] Running on {file} ...')
             path = os.path.join(image_folder, file)
+            img = cv2.imread(path)
+            H, W = img.shape[:2]
             model.conf = detection_cfg['model_conf']
             outputs = model(path)
             df = outputs.pandas().xyxy[0]
@@ -45,6 +47,12 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
             for i in range(len(xmins)):
                 xmin, ymin, xmax, ymax = int(xmins[i]), int(ymins[i]), int(xmaxs[i]), int(ymaxs[i])
                 conf, label = confs[i], labels[i]
+                border_h = int((ymax-ymin) * 0.1)
+                border_w = int((xmax-xmin) * 0.1)
+                xmin = max(0, xmin - border_w)
+                ymin = max(0, ymin - border_h)
+                xmax = min(W-1, xmax + border_w)
+                ymax = min(H-1, ymax + border_h)
                 boxes.append((xmin, ymin, xmax, ymax, label, conf))
             detection_results[path] = boxes
     else:
@@ -65,7 +73,7 @@ def classifier_multi_models(cfg: Dict, device):
             'batch_size': cfg['batch_size'],
         }
         test_loader = get_test_dataloader(cur_cfg, cfg['test_img_dir'])
-        model = swin_transformer_map[backbone](cfg['num_classes'])
+        model = arch_map[backbone](cfg['num_classes'])
 
         pred_vectors = np.zeros((len(image_names), cfg['num_classes']))
         model_list = os.listdir(cfg['weight_path'][id])
@@ -91,7 +99,7 @@ def classifier(classifier_cfg: Dict, device):
     image_names = os.listdir(classifier_cfg['test_img_dir'])
 
     predictions, confidences = np.zeros(len(image_names)), np.zeros(len(image_names))
-    model = swin_transformer_map[classifier_cfg['backbone']](classifier_cfg['num_classes'])
+    model = arch_map[classifier_cfg['backbone']](classifier_cfg['num_classes'])
     if not classifier_cfg['ensemble']:
         model.load_state_dict(torch.load(classifier_cfg['weight_path']))
         print('Load model ', classifier_cfg['weight_path'])
@@ -208,8 +216,8 @@ if __name__ == '__main__':
     # ocr -> run detection -> crop bbox images -> run classification
     # Uncommend below line to run OCR (if neccesary)
     # run_ocr(cfg['pres_image_dir'], output_dir=cfg['ocr']['output'])
-    # detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
-    # crop_bbox_images(detection_results, cfg['crop'])
+    detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
+    crop_bbox_images(detection_results, cfg['crop'])
     if cfg['multi_models']:
         classifier_multi_models(cfg['classifier_multi_models'], device)
     else:

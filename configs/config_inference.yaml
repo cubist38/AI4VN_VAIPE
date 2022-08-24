@@ -12,8 +12,8 @@ ocr:
   output: results/ocr_output.json
 
 detection:
-  model_conf: 0.2
-  weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_pill.pt
+  model_conf: 0.5
+  weight_path: detection/yolo/yolov5/runs/train/exp/yolov5_segment.pt
 
 classifier:
   ensemble: True
@@ -23,8 +23,8 @@ classifier:
   img_size: 256
   test_img_dir: data/crop_data
   backbone: swinv2_small_transformer
-  weight_ensemble_path: weights/cls/swinv2_kfold
-  weight_path: weights/cls/swinv2_small_transformer.pth
+  weight_ensemble_path: weights/cls/swinv2_interpolation_kfold
+  weight_path: weights/cls/swinv2_small_transformer_remove_background.pth
   output: results/csv/classifier_result.csv
 
 classifier_multi_models:
