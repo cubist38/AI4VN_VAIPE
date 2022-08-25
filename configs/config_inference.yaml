@@ -12,19 +12,22 @@ ocr:
 
 detection:
   model_conf: 0.5
+  bbox_extend_percent: 0.1
   # weight_path: detection/yolo/yolov5/runs/train/exp/best.pt
   weight_path: weights/detection/best.pt
+
+multi_models: False
 
 classifier:
   ensemble: True
   threshold: 0.5
   num_classes: 107
   batch_size: 16
-  img_size: 256
+  img_size: 512
   test_img_dir: data/crop_data
-  backbone: swinv2_small_transformer
-  weight_ensemble_path: weights/cls/swinv2_interpolation_kfold
-  weight_path: weights/cls/swinv2_small_transformer.pth
+  backbone: resnext50_32x4d
+  weight_ensemble_path: weights/cls/resnext50_ensemble
+  weight_path: weights/cls/resnext50_32x4d.pth
   output: results/csv/classifier_result.csv
 
 classifier_multi_models:

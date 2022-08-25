@@ -47,8 +47,8 @@ def run_detection(image_folder: str, detection_cfg: Dict, model_name: str = 'yol
             for i in range(len(xmins)):
                 xmin, ymin, xmax, ymax = int(xmins[i]), int(ymins[i]), int(xmaxs[i]), int(ymaxs[i])
                 conf, label = confs[i], labels[i]
-                border_h = int((ymax-ymin) * 0.1)
-                border_w = int((xmax-xmin) * 0.1)
+                border_h = int((ymax-ymin) * detection_cfg['bbox_extend_percent'])
+                border_w = int((xmax-xmin) * detection_cfg['bbox_extend_percent'])
                 xmin = max(0, xmin - border_w)
                 ymin = max(0, ymin - border_h)
                 xmax = min(W-1, xmax + border_w)
