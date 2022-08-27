@@ -6,6 +6,7 @@ arch_map = {
     'swin_tiny_transformer': swin_tiny_transformer,
     'swin_base_transformer_384': swin_base_transformer_384,
     'swin_large_transformer': swin_large_transformer,
+    'swinv1_small_transformer': swinv1_small_transformer,
     'swinv2_small_transformer': swinv2_small_transformer,
     'resnext50_32x4d': resnext50_32x4d
 }
