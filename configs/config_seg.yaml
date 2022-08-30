@@ -1,0 +1,4 @@
+model: "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+num_classes: 1
+model_path: 'weights/seg/model_final.pth'
+threshold: 0.4
