@@ -13,7 +13,6 @@ ocr:
 detection:
   model_conf: 0.5
   bbox_extend_percent: 0.1
-  # weight_path: detection/yolo/yolov5/runs/train/exp/best.pt
   weight_path: weights/detection/best.pt
 
 multi_models: False

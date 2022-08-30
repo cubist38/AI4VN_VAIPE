@@ -1,3 +1,8 @@
+import sys
+import os
+__dir__ = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(__dir__, 'PaddleOCR'))
+
 from .PaddleOCR.tools.infer.predict_det import TextDetector
 from .PaddleOCR.tools.infer import utility
 from .PaddleOCR.ppocr.utils.utility import *
