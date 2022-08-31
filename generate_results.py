@@ -17,12 +17,7 @@ if __name__ == '__main__':
     # Load config file
     cfg = yaml.safe_load(open('configs/config_inference.yaml'))
 
-    # if not os.path.exists(cfg['augment_dir']):
-    #     os.mkdir(cfg['augment_dir'])
-    create_directory(cfg['augment_dir'])
-
-    # if not os.path.exists(cfg['crop']):
-    #     os.mkdir(cfg['crop'])
+    create_directory(cfg['detection']['augment_dir'])
     create_directory(cfg['crop']['crop_img_dir'])
 
     device = torch.device(cfg['device'])
@@ -33,7 +28,7 @@ if __name__ == '__main__':
     print('Compled OCR!')
 
     print('Running Detection...')
-    detection_results = run_detection(cfg['pill_image_dir'], cfg['augment_dir'], cfg['detection'], cfg['crop'])
+    detection_results = run_detection(cfg['pill_image_dir'], cfg['detection'])
     print('Compled Detection!')
 
     print('Running Classification...')
