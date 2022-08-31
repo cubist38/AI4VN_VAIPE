@@ -1,5 +1,5 @@
 batch_size: 16
-img_size: 512
+img_size: 256
 device: cuda:0
 
 img_src: data/classifier_data/single_pill
@@ -7,18 +7,18 @@ unlabeled_img_src: data/crop_data
 data_dict: data/classifier_data/single_pill.json
 num_classes: 107
 
-k_fold: 0 # > 0 to use k-fold
+k_fold: 3 # > 0 to use k-fold
 
 trainer:
   epochs: 16
-  backbone: resnext50_32x4d
+  backbone: swinv2_small_transformer
   freeze: False
   unfreeze_epoch: 40
   log_step: 100
   eval_step: 9999
 
-  save_path: weights/cls/swinv2_interpolation_kfold
-  model_name: resnext50_32x4d
+  save_path: weights/cls/swinv2_small_new_data_ensemble
+  model_name: swinv2_small_transformer
 
   lr: 0.0001
   cls_lr: 0.001

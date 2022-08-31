@@ -7,9 +7,9 @@ from typing import Dict
 from sklearn.model_selection import train_test_split, StratifiedKFold
 
 from utilities.seed import seed_torch
-from classification.data_loader.utils import get_dataloader
-from classification.models import arch_map
-from classification.trainer import PillTrainer
+from algorithms.classification.data_loader.utils import get_dataloader
+from algorithms.classification.models import arch_map
+from algorithms.classification.trainer import PillTrainer
 
 def train_single_fold(fold_id: int, X_train, X_test, y_train, y_test, model, device, cfg: Dict):
     train_loader, valid_loader = get_dataloader(cfg, X_train, X_test, y_train, y_test)
