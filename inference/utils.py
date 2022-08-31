@@ -19,7 +19,7 @@ def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
         image_name = image_path.split('/')[-1]
         img = cv2.imread(image_path)
         for id, box in enumerate(boxes):
-            x_min, y_min, x_max, y_max, class_id, confidence_score = box
+            x_min, y_min, x_max, y_max = box
             crop_img = img[y_min:y_max, x_min:x_max]
             crop_img_name = str(id) + '_' + image_name
             crop_detection_map[crop_img_name] = {
@@ -73,14 +73,20 @@ def normalized_bbox_coordinate(boxes, Image_Width, Image_Height):
     return normalized_boxes
 
 
-def normalized_to_real(normalized_bboxes, Image_Width, Image_Height):
+def normalized_to_real(normalized_bboxes, Image_Width, Image_Height, bbox_extend_percent = 0.0):
     real_bboxes = []
     for normalized_bbox in normalized_bboxes:
-        real_xmin = normalized_bbox[0]*Image_Width
-        real_ymin = normalized_bbox[1]*Image_Height
-        real_xmax = normalized_bbox[2]*Image_Width
-        real_ymax = normalized_bbox[3]*Image_Height
-        real_bbox = [int(real_xmin), int(real_ymin), int(real_xmax), int(real_ymax)]
+        real_xmin = int(normalized_bbox[0]*Image_Width)
+        real_ymin = int(normalized_bbox[1]*Image_Height)
+        real_xmax = int(normalized_bbox[2]*Image_Width)
+        real_ymax = int(normalized_bbox[3]*Image_Height)
+        bbox_w, bbox_h = real_xmax - real_xmin, real_ymax - real_ymin
+        extend_w, extend_h = int(bbox_w * bbox_extend_percent), int(bbox_h * bbox_extend_percent)
+
+        real_xmin, real_xmax = max(0, real_xmin - extend_w), min(Image_Width, real_xmax + extend_w)
+        real_ymin, real_ymax = max(0, real_ymin - extend_h), min(Image_Height, real_ymax + extend_h)
+
+        real_bbox = [real_xmin, real_ymin, real_xmax, real_ymax]
         real_bboxes.append(real_bbox)
     
     return real_bboxes
