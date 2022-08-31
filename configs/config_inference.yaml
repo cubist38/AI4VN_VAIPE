@@ -12,21 +12,21 @@ ocr:
 
 detection:
   model_conf: 0.5
-  bbox_extend_percent: 0.1
-  weight_path: weights/detection/best.pt
+  weight_bbox_only_path: weights/detection/yolov5_weights_without_label.pt'
+  weight_bbox_only_path: 'weights/detection/yolov5_weights_with_label.pt'
 
-multi_models: False
+multi_models: True
 
 classifier:
   ensemble: True
   threshold: 0.5
   num_classes: 107
   batch_size: 16
-  img_size: 512
+  img_size: 256
   test_img_dir: data/crop_data
-  backbone: resnext50_32x4d
-  weight_ensemble_path: weights/cls/resnext50_ensemble
-  weight_path: weights/cls/resnext50_32x4d.pth
+  backbone: swinv2_small_transformer
+  weight_ensemble_path: weights/cls/swinv2_small_kfold
+  weight_path: weights/cls/swinv2_small_transformer.pth
   output: results/csv/classifier_result.csv
 
 classifier_multi_models:
@@ -35,7 +35,7 @@ classifier_multi_models:
   batch_size: 16
   num_models: 2
   img_size: [224, 256]
-  test_img_dir: data/process_crop_data
+  test_img_dir: data/crop_data
   backbone: [swin_tiny_transformer, swinv2_small_transformer]
   weight_path: [weights/cls/swin_tiny_kfold, weights/cls/swinv2_small_kfold]
   model_weight: [0.4, 0.6]
