@@ -1,8 +1,8 @@
 import cv2
 import os
 
-from ocr.text_detector.my_detector import MyDetector
-from ocr.text_classifier.my_classifier import MyClassifier
+from algorithms.ocr.text_detector.my_detector import MyDetector
+from algorithms.ocr.text_classifier.my_classifier import MyClassifier
 from utilities.prescription import *
 
 def pres_ocr(image_dir: str, saved: bool = False) -> list:

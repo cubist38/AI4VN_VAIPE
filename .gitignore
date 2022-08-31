@@ -11,10 +11,10 @@
 
 # for weights
 *.pth
-inference.*
+inference.pd*
 *.pt
 
-data/
+/data/
 weights/
 data/public_train/
 data/public_test/
