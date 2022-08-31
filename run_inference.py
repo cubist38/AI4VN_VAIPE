@@ -9,9 +9,31 @@ import torch
 import json
 import pandas as pd
 
+def rename(label_drugname: Dict, text):
+    if text in label_drugname:
+        return text
+    tokenizer = text.split(' ')
+    mass = tokenizer[-1]
+    if mass[-2:] == "mg":
+        m = float(mass[:-2])/1000
+        new_mass = (str(m) + 'g').replace('.', ',')
+    elif mass[-1:] == 'g':
+        m = int(float(mass[:-1].replace(',', '.')) * 1000)
+        new_mass = (str(m) + 'mg')
+    else:
+        return None
+    new_text = ""
+    for i in range(len(tokenizer) - 1):
+        new_text += tokenizer[i] + ' '
+    new_text += new_mass
+    return new_text
+
 # This is the function which maps from text to vaipe's label.
 def find_vaipe_label(label_drugname: Dict, text):
-    return label_drugname[text]
+    text = rename(label_drugname, text)
+    if text:
+        return label_drugname[text]
+    return None
 
 # We should pass the ocr_output_dict to this function to have the mapping.
 def text_to_vaipe_label(label_drugname: Dict, ocr):
@@ -92,7 +114,11 @@ if __name__ == '__main__':
         crop_detection_map = json.load(f)
     classifier_df = pd.read_csv(cfg['classifier']['output'])
 
-    ocr_result = text_to_vaipe_label(label_drugname, ocr_output_dict)
+    ocr = {}
+    for l in ocr_output_dict:
+        ocr[l[0]] = l[1]
+
+    ocr_result = text_to_vaipe_label(label_drugname, ocr)
 
     od_results = {}
     for i in range(len(classifier_df)):

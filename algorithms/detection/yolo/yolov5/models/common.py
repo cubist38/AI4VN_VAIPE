@@ -19,6 +19,8 @@ import torch
 import torch.nn as nn
 import yaml
 from PIL import Image
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 from torch.cuda import amp
 
 from utils.dataloaders import exif_transpose, letterbox

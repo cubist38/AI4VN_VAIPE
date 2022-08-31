@@ -1,4 +1,3 @@
-augment_dir: data/augment
 pill_image_dir: data/public_test/pill/image
 pres_image_dir: data/public_test/prescription/image
 device: 'cuda:0'
@@ -12,8 +11,9 @@ ocr:
 
 detection:
   model_conf: 0.5
-  bbox_extend_percent: 0.1
-  weight_path: weights/detection/best.pt
+  bbox_extend_percent: 0.0
+  augment_dir: data/augment
+  weight_path: weights/detection/yolov5_weights_without_label.pt
 
 multi_models: False
 
@@ -22,11 +22,11 @@ classifier:
   threshold: 0.5
   num_classes: 107
   batch_size: 16
-  img_size: 512
+  img_size: 256
   test_img_dir: data/crop_data
-  backbone: resnext50_32x4d
-  weight_ensemble_path: weights/cls/resnext50_ensemble
-  weight_path: weights/cls/resnext50_32x4d.pth
+  backbone: swinv2_small_transformer
+  weight_ensemble_path: weights/cls/swinv2_small_transformer_ensemble
+  weight_path: weights/cls/swinv2_small_transformer.pth
   output: results/csv/classifier_result.csv
 
 classifier_multi_models:
