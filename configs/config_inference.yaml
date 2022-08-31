@@ -13,7 +13,7 @@ ocr:
 detection:
   model_conf: 0.5
   weight_bbox_only_path: weights/detection/yolov5_weights_without_label.pt'
-  weight_bbox_only_path: 'weights/detection/yolov5_weights_with_label.pt'
+  weight_bbox_label_path: 'weights/detection/yolov5_weights_with_label.pt'
 
 multi_models: True
 
