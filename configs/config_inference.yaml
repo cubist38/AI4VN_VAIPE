@@ -1,4 +1,4 @@
-pill_image_dir: data/test
+pill_image_dir: data/public_test/pill/image
 pres_image_dir: data/public_test/prescription/image
 device: 'cuda:0'
 
@@ -13,7 +13,7 @@ detection:
   model_conf: 0.5
   bbox_extend_percent: 0.0
   augment_dir: data/augment
-  weight_path: weights/detection/yolov5_best.pt
+  weight_path: weights/detection/yolov5_weights_without_label.pt
 
 multi_models: False
 
