@@ -3,7 +3,7 @@ pill_image_dir: data/public_test/pill/image
 pres_image_dir: data/public_test/prescription/image
 device: 'cuda:0'
 
-label_drugnames_path: results/label_drugnames.json
+label_drugnames_path: results/drugname_label.json
 pill_pres_map_path: data/public_test/pill_pres_map.json
 submit_file: results/csv/results.csv
 

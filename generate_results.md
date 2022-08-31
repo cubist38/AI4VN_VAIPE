@@ -18,14 +18,14 @@ Content:
     ```
 
 - **Pill detection**:
-    - Download [YOLOv5 weights](https://drive.google.com/uc?id=1Eiwp6vd5wK1Fu_Wxuowpo5nx2DUhcyzq) and put it in the path: `weights/detection/`.
+    - First, you have to download [YOLOv5 weights without label](https://drive.google.com/file/d/1JzCyoExM7PB-wU9eNLENokkABDJRe76F/view?usp=sharing) and [YOLOv5 weights with label](https://drive.google.com/file/d/1BaQ_fBSYFyB0u9bm3HEq-3mC4G7cY_fG/view?usp=sharing). After that, you should put them in this path: `weights/detection/`.
 
 - **Pill classification**:
     <!-- - `Swin Transformer V2` can be found at [Google drive](https://drive.google.com/drive/folders/1x7TsyX7xj_wRFAwEzgJ8omGGS9MuWNnZ?usp=sharing).  
     Download and move to `weights/cls/`. After that, we have the path `weights/cls/swinv2_kfold`.
     - `Swin Tiny` can be found at [Google drive](https://drive.google.com/drive/folders/1ZPixqk1kqinfLFxT45RA2A3rDekjUxN0?usp=sharing).  
     Download and move to `weights/cls/`. After that, we have the path `weights/cls/swin_tiny_kfold`. -->
-    - Download the entire weight folders of [Swin Transformer V2](https://drive.google.com/drive/folders/1x7TsyX7xj_wRFAwEzgJ8omGGS9MuWNnZ?usp=sharing) and [Swin Tiny](https://drive.google.com/drive/folders/1ZPixqk1kqinfLFxT45RA2A3rDekjUxN0?usp=sharing), then put them in the path `weights/cls/`.
+    - Download the entire weight folders of [Swin Transformer V2](https://drive.google.com/drive/folders/16M99KvYmC66fQty3PvtXDAdmm9W61DSO?usp=sharing) and [Swin Tiny](https://drive.google.com/drive/folders/1eWLflWQ5LISuU-d7XEqbwS-oYfhwJB5a?usp=sharing), then put them in this path `weights/cls/`.
     - After that, the folder `weights/cls/` should be in this format:
     ```
     ---weights/cls/

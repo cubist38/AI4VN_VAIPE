@@ -16,29 +16,17 @@ from utilities.dir import create_directory
 if __name__ == '__main__':
     # Load config file
     cfg = yaml.safe_load(open('configs/config_inference.yaml'))
-
-    # if not os.path.exists(cfg['augment_dir']):
-    #     os.mkdir(cfg['augment_dir'])
-    create_directory(cfg['augment_dir'])
-
-    # if not os.path.exists(cfg['crop']):
-    #     os.mkdir(cfg['crop'])
-    create_directory(cfg['crop']['crop_img_dir'])
-
     device = torch.device(cfg['device'])
+    #k_fold = False
 
     # ocr -> run detection + augmentation -> crop bbox images -> run classification
-    print('Running OCR...')
-    # run_ocr(cfg['pres_image_dir'], output_dir=cfg['ocr']['output'])
-    print('Compled OCR!')
+    run_ocr(cfg['pres_image_dir'], output_dir = cfg['ocr']['output'])
+    od_results = run_detection(cfg['pill_image_dir'], cfg['augment_dir'], cfg['detection'], cfg['crop'])
+    if cfg['multi_models']:
+        classifier_multi_models(cfg['classifier_multi_models'], device)
+    else:
+        classifier(cfg['classifier'], device)
 
-    print('Running Detection...')
-    detection_results = run_detection(cfg['pill_image_dir'], cfg['augment_dir'], cfg['detection'], cfg['crop'])
-    print('Compled Detection!')
-
-    print('Running Classification...')
-    classifier_multi_models(cfg['classifier_multi_models'], device)
-    print('Completed Classification...')
 
     # generate submission
     print('Generating submit file ...', end = ' ')
@@ -53,10 +41,10 @@ if __name__ == '__main__':
         crop_detection_map = json.load(f)
     
     classifier_df = pd.read_csv(cfg['classifier']['output'])
+    
 
     ocr_result = text_to_vaipe_label(label_drugname, ocr_output_dict)
 
-    od_results = {}
     for i in range(len(classifier_df)):
         image_id = classifier_df['image_id'][i]
         prediction = classifier_df['prediction'][i]
@@ -69,7 +57,6 @@ if __name__ == '__main__':
             'x_max': annotation['x_max'], 
             'y_max': annotation['y_max'],
             'class_id': prediction if confidence > cfg['classifier']['threshold'] else 107,
-            #'class_id': prediction,
             'confidence_score': confidence
         }
         if annotation['image_id'] not in od_results:
@@ -78,7 +65,7 @@ if __name__ == '__main__':
         od_results[annotation['image_id']].append(item)
 
     fin_res = map_to_final_result(od_results, ocr_result, pill_pres_map)
-
+    
     class_id = []
     x_min = []
     x_max = []

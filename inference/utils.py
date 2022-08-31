@@ -1,4 +1,4 @@
-from typing import Dict
+\from typing import Dict
 import shutil
 import cv2
 import json
@@ -85,13 +85,33 @@ def normalized_to_real(normalized_bboxes, Image_Width, Image_Height):
     
     return real_bboxes
 
-def mycrop(img, x_min, y_min, x_max, y_max, offset = 10):
+def mycropoffset(img, x_min, y_min, x_max, y_max, offset = 10):
     if x_min - offset > 0:
         x_min = x_min - offset
     if y_min - offset > 0:
         y_min = y_min - offset
     
+    x_max = x_max + offset
+    y_max = y_max + offset
+    
     return img[y_min : y_max, x_min : x_max]
+
+def check_iou(bbox1, bbox2, iou_thr):
+    x_min = max(bbox1[0], bbox2[0])
+    y_min = max(bbox1[1], bbox2[1])
+    x_max = min(bbox1[2], bbox2[2])
+    y_max = min(bbox1[3], bbox2[3])
+    
+    interArea = max(x_max - x_min, 0) * max(y_max - y_min, 0)
+    
+    bbox1Area = (bbox1[2] - bbox1[0]) * (bbox1[3] - bbox1[1])
+    bbox2Area = (bbox2[2] - bbox2[0]) * (bbox2[3] - bbox2[1])
+    
+    iou = interArea / (bbox1Area + bbox2Area - interArea)
+    
+    if iou > iou_thr:
+        return True
+    return False
     
 # ====================== MAPPING ==================== #
 
