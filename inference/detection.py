@@ -36,7 +36,7 @@ def run_detection(image_folder: str, detection_cfg: Dict,  model_name: str = 'yo
                     path = img_path
                 else:
                     path = os.path.join(detection_cfg['augment_dir'], file.split('.')[0] + '_' + str(idx) + '.jpg')
-                outputs = model(path)
+                outputs = model(path, size = 640)
                 df = outputs.pandas().xyxy[0]
                 xmins, ymins, xmaxs, ymaxs = df['xmin'], df['ymin'], df['xmax'], df['ymax']
                 confs = df['confidence']
