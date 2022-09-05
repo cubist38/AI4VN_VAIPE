@@ -14,6 +14,9 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
     '''
     detection_results = {}
 
+    if not os.path.exists(augment_folder):
+        os.mkdir(augment_folder)
+
     if model_name == 'yolov5':
         model = torch.hub.load('algorithms/detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_only_path'], source='local')
         model1 = torch.hub.load('algorithms/detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_label_path'], source='local')
@@ -129,7 +132,6 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
                     }
                     cv2.imwrite(os.path.join(crop_cfg['crop_img_dir'], crop_image_name), crop_img)
                 else:
-                    cnt += 1
                     boxes.append({'x_min': xmin, 'y_min': ymin, 'x_max': xmax, 'y_max': ymax, 'class_id': int(fin_labels[i]), 'confidence_score': fin_scores[i]})
                 
                 
@@ -139,7 +141,5 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
     else:
         print('This model_name is not valid')
         return None
-    
-    #print('Total bbox small', cnt)
-    
+        
     return detection_results
