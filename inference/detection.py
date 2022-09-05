@@ -16,6 +16,8 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
 
     if not os.path.exists(augment_folder):
         os.mkdir(augment_folder)
+    if not os.path.exists(crop_cfg['crop_img_dir']):
+        os.mkdir(crop_cfg['crop_img_dir'])
 
     if model_name == 'yolov5':
         model = torch.hub.load('algorithms/detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_only_path'], source='local')
