@@ -4,6 +4,8 @@ import os
 import yaml
 import json
 import pandas as pd
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 from inference.classification import classifier_multi_models
 from inference.detection import run_detection
