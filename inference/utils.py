@@ -116,10 +116,30 @@ def check_iou(bbox1, bbox2, iou_thr):
 # ====================== MAPPING ==================== #
 
 # This is the function which maps from text to vaipe's label.
-def find_vaipe_label(label_drugname: Dict, text):
-    if text not in label_drugname:
+def rename(label_drugname: Dict, text):
+    if text in label_drugname:
+        return text
+    tokenizer = text.split(' ')
+    mass = tokenizer[-1]
+    if mass[-2:] == "mg":
+        m = float(mass[:-2])/1000
+        new_mass = (str(m) + 'g').replace('.', ',')
+    elif mass[-1:] == 'g':
+        m = int(float(mass[:-1].replace(',', '.')) * 1000)
+        new_mass = (str(m) + 'mg')
+    else:
         return None
-    return label_drugname[text]
+    new_text = ""
+    for i in range(len(tokenizer) - 1):
+        new_text += tokenizer[i] + ' '
+    new_text += new_mass
+    return new_text
+
+def find_vaipe_label(label_drugname: Dict, text):
+    text = rename(label_drugname, text)
+    if text:
+        return label_drugname[text]
+    return None
 
 # We should pass the ocr_output_dict to this function to have the mapping.
 def text_to_vaipe_label(label_drugname: Dict, ocr):
@@ -129,9 +149,10 @@ def text_to_vaipe_label(label_drugname: Dict, ocr):
         image_name = key.split('/')[-1]
         for text in value:
             vaipe_label = find_vaipe_label(label_drugname, text)
-            for t in vaipe_label:
-                labels.append(t)
-        new_ocr[image_name] = labels
+            if vaipe_label:
+                for t in vaipe_label:
+                    labels.append(t)
+            new_ocr[image_name] = labels
     return new_ocr
     
 # This is the function which changes form to be easy to process.    
