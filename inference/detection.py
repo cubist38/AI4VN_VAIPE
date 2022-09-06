@@ -19,16 +19,6 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
     if not os.path.exists(crop_cfg['crop_img_dir']):
         os.mkdir(crop_cfg['crop_img_dir'])
 
-    def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, crop_cfg: Dict, model_name: str = 'yolov5') -> Dict:
-    '''
-        Run Object Detection model to return the result of images in image_folder
-        Returns:
-            A dictonary with:
-            - key: path_to_image
-            - value: a list of objects with the following information: (xmin, ymin, xmax, ymax, label)
-    '''
-    detection_results = {}
-
     if model_name == 'yolov5':
         model = torch.hub.load('detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_only_path'], source='local')
         model1 = torch.hub.load('detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_label_path'], source='local')
