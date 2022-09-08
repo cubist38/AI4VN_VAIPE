@@ -21,5 +21,3 @@ WORKDIR /workspace
 RUN pip3 install paddlepaddle
 
 RUN pip3 install -r requirements.txt
-
-CMD [ "python3", "generate_results.py"]
