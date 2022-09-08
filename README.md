@@ -15,17 +15,17 @@ Content:
 
 - Build docker image:
 ```
-docker build -t ai4vn-teamRealCottonCandy .
+docker build -t ai4vn-teamrealcottoncandy .
 ```
 
 - Run docker container:
 ```
-docker run ai4vn-teamRealCottonCandy
+docker run ai4vn-teamrealcottoncandy
 ```
 
 - Mount folder in docker container to real folder (change the source folder to a appropriate folder):
 ```
-docker run -d -it --name ai4vn-teamRealCottonCandy --mount source=/mnt/disk1/ai4vn-teamRealCottonCandy, target=/workspace
+docker run -d -it --name ai4vn-teamrealcottoncandy --mount source=/mnt/disk1/ai4vn-teamrealcottoncandy, target=/workspace
 ```
 
 ## 2. Training
