@@ -1,101 +1,139 @@
-# AI4VN_VAIPE
+# AI4VN_VAIPE - Team Real Cotton Candy
 
 Content:
-- <a href="#dataset">Dataset</a>
-- <a href="#classification">Pill Classification</a>
-- <a href="#ocr">Drugname OCR</a>
-- <a href="#detection">Pill detection</a>
-- <a href="#result">Generate results</a>
-- <a href="#evaluation">Evaluation</a>
-- <a href="#visualizer">Visualizer</a>
+- <a href="#docker">1. Docker command</a>
+- <a href="#training">2. Training</a>
+    - <a href="#ocr_train">2.1. OCR</a>
+    - <a href="#yolov5_train">2.2. YOLOv5</a>
+    - <a href="#cls_train">2.3. Classification</a>
+- <a href="#inference">3. Inference</a>
+    - <a href="#trained weights">3.1. Download trained weights</a>
+    - <a href="#result">3.2. Generate results</a>
 
+## 1. Docker command
+<span id="docker"></span>
 
-## Dataset
-<span id="dataset"></span>
-Download the data at [Google drive](https://drive.google.com/drive/folders/1PNhStby1B_xZBwS1mic-EssPX8Q_0odR?usp=sharing) and re-ordering follows the below structure.
+- Build docker image:
 ```
----data/
-    |---label/
+docker build -t ai4vn-teamRealCottonCandy .
+```
+
+- Run docker container:
+```
+docker run ai4vn-teamRealCottonCandy
+```
+
+- Mount folder in docker container to real folder (change the source folder to a appropriate folder):
+```
+docker run -d -it --name ai4vn-teamRealCottonCandy --mount source=/mnt/disk1/ai4vn-teamRealCottonCandy, target=/workspace
+```
+
+## 2. Training
+<span id="training"></span>
+
+### 2.1. OCR
+<span id="ocr_train"></span>
+
+- Download [OCR training data](https://drive.google.com/uc?id=1TQF7RIvhM6VljmDgFnGmnfALls-NlsOY&export=download), then extract it to the folder `training/ocr/vietocr_data`. Notice that, the images in this dataset is cropped from the original prescription images of VAIPE contest. After this step, this folder should be in this format:
+    ```
+    ---training/ocr/vietocr_data/
+        |---images/
+        |---train_annotations.txt
+        |---valid_annotations.txt
+    ```
+
+- Run the OCR training with this following command:
+    ```
+    python training/ocr/train_ocr.py
+    ```
+
+- When the training finished successfully, the weights will be stored at `seq2seq_finetuned.pth`. To this it for inference, let's copy it to this folder: `weights/ocr/seq2seq_finetuned.pth`.
+
+### 2.2. YOLOv5
+<span id="yolov5_train"></span>
+
+- We will training 2 version of YOLOv5, with different types of dataset:
+    - Download [training data with 107 class](https://drive.google.com/uc?id=1frC6SLsAh6eQ5TW6R_OpXTTBc72RoNq_&export=download), then extract it to the folder `training/detection/yolo_107/yolo_107_data`. We created this dataset by cutting out the pill of class id 107 (out of prescription) from the images (so we will have 107 class id, from 0 to 106). After this step, this folder should be in this format:
+    ```
+    ---training/detection/yolo_107/yolo_107_data/
+        |---train/
+        |---val/
+    ```
+    - Follow the similar step with the [training data with 1 class](https://drive.google.com/uc?id=1Qs-4YWKkzlsNtiJvlIgh0lvpXZXcHlyz&export=download) and folder `training/detection/yolo_1/yolo_1_data`. This dataset is created by replacing the class_id of all pills with 0 (use YOLOv5 for bounding box detection).
+
+- Run the following commands to train YOLOv5 models:
+
+    - YOLOv5 with 107 class:
+    ```
+    python training/detection/yolo_107/train.py --img 640 --batch 16 --epochs 100 --data training/detection/yolo_107/vaipe.yaml --weights yolov5s.pt
+    ```
+
+    - YOLOv5 with 1 class:
+    ```
+    python training/detection/yolo_1/train.py --img 640 --batch 16 --epochs 100 --data training/detection/yolo_1/vaipe.yaml --weights yolov5s.pt
+    ```
+
+- When the trainings finished successfully, the weights will be stored at these folders:
+    - `training/detection/yolo_107/runs/exp/train/weights/best.pt` for YOLOv5 with 107 class. We move it to the path `weights/detection/yolov5_weights_with_label.pt` for inference (that weights file was renamed).
+    - `training/detection/yolo_1/runs/exp/train/weights/best.pt` for YOLOv5 with 1 class. Do the similar steps to the previous with the file name `yolov5_weights_without_label.pt`.
+
+### 2.3. Classification
+<span id="cls_train"></span>
+
+- Download the [training data](https://drive.google.com/uc?id=1Lvr8AOnqMfAP9bdWTLbiirtIFEQPxu1M&export=download) and extract it to the folder `training/classification/cls_data`. We created this dataset by cropping the pills from original images of VAIPE contest. After this step, this folder should be in this format:
+
+    ```
+    ---training/classification/cls_data/
         |---single_pill/
         |---single_pill.json
-        |---pills/
-            |---image/
-            |---label/
-        |---pills.json
-    |--unlabel/             # for inference
-```
+    ```
 
+- Run the following command:
+    ```
+    python training/classification/train_cls.py
+    ```
+## 3. Inference
+<span id="inference"></span>
 
-## Pills classification
-<span id="classification"></span>
+For inference, we can use the weights from <a href="#training">Training</a> section, or download the weights from our Drive.
 
-### 1. Download trained weights
-All trained models can be found at [Google drive](https://drive.google.com/drive/folders/1kUopc2ZHbzSY5lTboR7XFtIKtIVdQwAo?usp=sharing).  
-Download and move to `weights/cls/`.
-### 2. Run classification
-(For re-training classification)  
-Change the hyper-parameters in coressponding config file `configs/config_cls.yaml`.  
-To run training  
-```bash
-python train_cls.py
-```
+***Note:*** We have also included these weights in the docker container. If you can't find the `weights` folder, let's follow section <a>3.1. Download trained weights</a>.
 
-## Drugname OCR
-<span id="ocr"></span>
+### 3.1. Download trained weights
+<span id="trained weights"></span>
 
-### 1. Download pre-trained weights
+- **OCR weights**:
+    - Download <a href="https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar">text detector weights</a> from PaddleOCR and **extract** it, then download <a href="https://drive.google.com/uc?id=1O5DkqiM3lE50sjzVz5_NuguILaS4BUER">text classifier weights</a> (fine-tuning from pre-trained model of vietocr).
+    - Put these weights in the path `weights/ocr/`. After these steps, folder `weights/ocr` should be in this format:
+    ```
+    ---weights/ocr/
+        |---ch_PP-OCRv3_det_infer/
+            |--- files
+        |---seq2seq_finetuned.pth
+    ```  
 
-- Firstly, you have to download <a href="https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar">text detector weights</a> from PaddleOCR. Then extract it to this path: `./ocr/text_detector/PaddleOCR/weights`.
-- After that, download <a href="https://drive.google.com/uc?id=1O5DkqiM3lE50sjzVz5_NuguILaS4BUER">text classifier weights</a> (fine-tuning from pre-trained model of vietocr) and put it in this path: `./ocr/text_classifier/vietocr/weights`.
+- **Pill detection**:
+    - First, you have to download [YOLOv5 weights without label](https://drive.google.com/file/d/1JzCyoExM7PB-wU9eNLENokkABDJRe76F/view?usp=sharing) and [YOLOv5 weights with label](https://drive.google.com/file/d/1BaQ_fBSYFyB0u9bm3HEq-3mC4G7cY_fG/view?usp=sharing). After that, you should put them in this path: `weights/detection/`.
 
-### 2. Run OCR for prescription
+- **Pill classification**:
+    <!-- - `Swin Transformer V2` can be found at [Google drive](https://drive.google.com/drive/folders/1x7TsyX7xj_wRFAwEzgJ8omGGS9MuWNnZ?usp=sharing).  
+    Download and move to `weights/cls/`. After that, we have the path `weights/cls/swinv2_kfold`.
+    - `Swin Tiny` can be found at [Google drive](https://drive.google.com/drive/folders/1ZPixqk1kqinfLFxT45RA2A3rDekjUxN0?usp=sharing).  
+    Download and move to `weights/cls/`. After that, we have the path `weights/cls/swin_tiny_kfold`. -->
+    - Download the entire weight folders of [Swin Transformer V2](https://drive.google.com/drive/folders/16M99KvYmC66fQty3PvtXDAdmm9W61DSO?usp=sharing) and [Swin Tiny](https://drive.google.com/drive/folders/1eWLflWQ5LISuU-d7XEqbwS-oYfhwJB5a?usp=sharing), then put them in this path `weights/cls/`.
+    - After that, the folder `weights/cls/` should be in this format:
+    ```
+    ---weights/cls/
+        |---swinv2_kfold/
+            |--- *.pth
+        |---swin_tiny_kfold/
+            |--- *pth
+    ```
 
-```python
-from ocr.pres_ocr import pres_ocr
-import json
-
-# image_dir can be a path to specify image or a folder of images
-ocr_result = pres_ocr(image_dir='./personal_test_images', saved=False)
-
-ocr_output_dict = {}
-for item in ocr_result:
-    image_path, drugnames = item
-    ocr_output_dict[image_path] = []
-    for drug in drugnames:
-        ocr_output_dict[image_path].append(drug)
-
-with open("./personal_pres_ocr_output.json", "w", encoding="utf-8") as f:
-    json.dump(ocr_output_dict, f, ensure_ascii=False)
-```
-
-## Pill detection
-<span id="detection"></span>
-
-### 1. Download weights of detection models
-
-- First, you have to download [YOLOv5 weights without label](https://drive.google.com/file/d/1JzCyoExM7PB-wU9eNLENokkABDJRe76F/view?usp=sharing) and [YOLOv5 weights with label](https://drive.google.com/file/d/1BaQ_fBSYFyB0u9bm3HEq-3mC4G7cY_fG/view?usp=sharing). After that, you should put them in this path: `./detection/yolo/yolov5/runs/train/exp/`.
-
-### 2. Run object detection for pill images
-
-```python
-from detection.run import do_detection
-
-image_folder = './personal_images'
-
-results = do_detection(image_folder, batch_size=32, model_name='yolov5')
-
-for image, boxes in results.items():
-    print(image)
-    print('xmin, ymin, xmax, ymax, label, conf')
-    for box in boxes:
-        print(box)
-    print('----------------------------')
-```
-
-## Generate results
+### 3.2. Generate results
 <span id="result"></span>
 
-To generate the result file (.csv) for data in folder at `data_path`, the structure of this folder has to be in the following format:
+The data folder `data_path`'s structure has to be in the following format:
 
 ```
 ---data_path/
@@ -106,44 +144,18 @@ To generate the result file (.csv) for data in folder at `data_path`, the struct
     |---pill_pres_map.json
 ```
 
-Then run this code:
-
-```python
-from result.run import get_result
-
-data_path = '/path/to/data_path'
-get_result(data_path, output_path = './results/csv/results.csv')
+Before running the generate results script, we have to specify the path to data folder in the file `configs/config_inference.yaml`, at these 3 lines (the following values are for illustration):
+```
+pill_image_dir: data_path/pill/image
+pres_image_dir: data_path/prescription/image
+pill_pres_map_path: data_path/pill_pres_map.json
 ```
 
-## Evaluation
-<span id="evaluation"></span>
+Currently, we set `data_path` to `data/public_test`.    
 
-After you generate the result file from preview section, let's run the following code to get the wmAP metrics of your result:
-
-```python
-from evaluate.run import eval
-eval('path/to/your/results.csv', 'data/train.csv')
+To generate result, we run the following command:
+```
+python generate_results.py
 ```
 
-## Visualizer
-<span id="visualizer"></span>
-
-```python
-from utilities.io import read_image, read_bbox
-from visualizer.pill import apply_bbox
-import cv2
-
-image_path = 'data/label/pill/image/VAIPE_P_0_0.jpg'
-bbox_path = 'data/label/pill/label/VAIPE_P_0_0.json'
-
-image = read_image(image_path)
-bbox_list = read_bbox(bbox_path)
-
-bbox_image = apply_bbox(image, bbox_list)
-
-cv2.imshow('visualize pills', bbox_image)
-cv2.waitKey(0)
-
-#closing all open windows 
-cv2.destroyAllWindows() 
-```
+The result file will be stored at `results/csv/results.csv`.
