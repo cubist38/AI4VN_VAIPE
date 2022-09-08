@@ -23,7 +23,7 @@ psutil
 thop>=0.1.1
 
 # OCR
-paddlepaddle
+# paddlepaddle
 paddleocr
 einops==0.2.0
 shapely
