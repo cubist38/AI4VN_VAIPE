@@ -25,7 +25,7 @@ docker run ai4vn-teamrealcottoncandy
 
 - Mount folder in docker container to real folder (change the source folder to a appropriate folder):
 ```
-docker run -d -it --name ai4vn-teamrealcottoncandy --mount source=/mnt/disk1/ai4vn-teamrealcottoncandy, target=/workspace
+docker run -d -it --name ai4vn-teamrealcottoncandy --mount source=/mnt/disk1/ai4vn-teamrealcottoncandy, target=/workspace ai4vn-teamrealcottoncandy
 ```
 
 ## 2. Training
