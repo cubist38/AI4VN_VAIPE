@@ -2,9 +2,9 @@ batch_size: 16
 img_size: 256
 device: cuda:0
 
-img_src: data/classifier_data/single_pill
-unlabeled_img_src: data/crop_data
-data_dict: data/classifier_data/single_pill.json
+img_src: training/classification/cls_data/single_pill
+unlabeled_img_src: training/classification/cls_data/crop_data
+data_dict: training/classification/cls_data/single_pill.json
 num_classes: 107
 
 k_fold: 3 # > 0 to use k-fold

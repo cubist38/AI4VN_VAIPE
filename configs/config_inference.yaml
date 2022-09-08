@@ -1,10 +1,12 @@
-augment_dir: data/augment
 pill_image_dir: data/public_test/pill/image
 pres_image_dir: data/public_test/prescription/image
+pill_pres_map_path: data/public_test/pill_pres_map.json
+
+augment_dir: data/augment
+
 device: 'cuda:0'
 
 label_drugnames_path: results/drugname_label.json
-pill_pres_map_path: data/public_test/pill_pres_map.json
 submit_file: results/csv/results.csv
 
 ocr:
@@ -12,8 +14,8 @@ ocr:
 
 detection:
   model_conf: 0.5
-  weight_bbox_only_path: weights/detection/yolov5_weights_without_label.pt'
-  weight_bbox_label_path: 'weights/detection/yolov5_weights_with_label.pt'
+  weight_bbox_only_path: weights/detection/yolov5_weights_without_label.pt
+  weight_bbox_label_path: weights/detection/yolov5_weights_with_label.pt
 
 multi_models: True
 
