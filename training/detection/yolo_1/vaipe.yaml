@@ -1,0 +1,5 @@
+train: ./yolo_1_data/train/images
+val: ./yolo_1_data/val/images
+
+nc: 1
+names: ['pill']
