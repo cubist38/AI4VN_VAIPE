@@ -95,9 +95,9 @@ docker run -d -it --name ai4vn-teamRealCottonCandy --mount source=/mnt/disk1/ai4
 ## 3. Inference
 <span id="inference"></span>
 
-For inference, we can use the weights from <a href="#training">Training</a> section, or download the weights from our Drive.
+For inference, we can use the weights from section <a href="#training">2. Training</a>, or download the weights from our Drive.
 
-***Note:*** We have also included these weights in the docker container. If you can't find the `weights` folder, let's follow section <a>3.1. Download trained weights</a>.
+***Note:*** We have also included these weights in the docker container. If you can't find the `weights` folder, let's follow section <a href="#trained weights">3.1. Download trained weights</a>.
 
 ### 3.1. Download trained weights
 <span id="trained weights"></span>
