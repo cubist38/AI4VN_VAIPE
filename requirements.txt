@@ -41,7 +41,7 @@ lxml
 premailer
 openpyxl
 attrdict
-gdown
+vietocr
 
 # Test-Time-Augmentation (TTA)
 ensemble-boxes
