@@ -145,7 +145,10 @@ def rename(label_drugname: Dict, text):
     mass = tokenizer[-1]
     if mass[-2:] == "mg":
         m = float(mass[:-2])/1000
-        new_mass = (str(m) + 'g').replace('.', ',')
+        if abs(m - int(m)) < 0.001:
+            new_mass = str(int(m)) + 'g'
+        else:
+            new_mass = (str(m) + 'g').replace('.', ',')
     elif mass[-1:] == 'g':
         m = int(float(mass[:-1].replace(',', '.')) * 1000)
         new_mass = (str(m) + 'mg')
