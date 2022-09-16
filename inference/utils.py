@@ -7,6 +7,27 @@ import albumentations as A
 from ensemble_boxes import *
 from utilities.dir import create_directory
 
+# ====================== Detection ==================== #
+
+def convert_to_original_shape(boxes, old_w, old_h, w, h, target_size = 640):
+    
+    new_boxes = []
+
+    x_scale = old_w / w
+    y_scale = old_h / h
+    
+    for bbox in boxes:
+        x, y, w, h, label = bbox['x'], bbox['y'], bbox['w'], bbox['h'], bbox['label']
+        new_x = int(np.round(x * x_scale))
+        new_y = int(np.round(y * y_scale))
+        new_w = int(np.round(w * x_scale))
+        new_h = int(np.round(h * y_scale))
+        new_boxes.append({'x': new_x, 'y': new_y, 'w': new_w, 'h': new_h, 'label': label})
+
+    return new_boxes
+    
+    
+
 def crop_bbox_images(detection_results: Dict, crop_cfg: Dict):
     '''
         Crop images based on bounding box, using in classifier.

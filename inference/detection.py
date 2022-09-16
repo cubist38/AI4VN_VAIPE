@@ -2,6 +2,7 @@ from typing import Dict
 import torch
 import os
 import cv2
+import json
 from inference.utils import *
 
 def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, crop_cfg: Dict, model_name: str = 'yolov5') -> Dict:
@@ -18,6 +19,9 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
         os.mkdir(augment_folder)
     if not os.path.exists(crop_cfg['crop_img_dir']):
         os.mkdir(crop_cfg['crop_img_dir'])
+
+    with open('/kaggle/input/private-test/img_shape.json') as f:
+        img_shape = json.load(f)
 
     if model_name == 'yolov5':
         model = torch.hub.load('algorithms/detection/yolo/yolov5', 'custom', path=detection_cfg['weight_bbox_only_path'], source='local')
@@ -124,8 +128,22 @@ def run_detection(image_folder: str, augment_folder: str, detection_cfg: Dict, c
                 else:
                     boxes.append({'x_min': xmin, 'y_min': ymin, 'x_max': xmax, 'y_max': ymax, 'class_id': int(fin_labels[i]), 'confidence_score': fin_scores[i]})
                 
-                
-            detection_results[file] = boxes  
+            
+            
+            old_w = img_shape[file]['Width']
+            old_h = img_shape[file]['Height']
+
+            cnt = 3
+            
+            original_shape_boxes = convert_to_original_shape(boxes, old_w, old_h, shape[1], shape[0])
+
+            if cnt > 0:
+                print(boxes)
+                print(original_shape_boxes)
+
+            detection_results[file] = original_shape_boxes
+            
+            
         with open(crop_cfg['crop_detection_map'], "w") as f:
             json.dump(crop_detection_map, f)
     else:
