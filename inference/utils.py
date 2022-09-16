@@ -23,7 +23,7 @@ def convert_to_original_shape(boxes, old_w, old_h, w, h, target_size = 640):
         new_ymin = int(np.round(ymin * y_scale))
         new_xmax = int(np.round(xmax * x_scale))
         new_ymax = int(np.round(ymax * y_scale))
-        new_boxes.append({'x_min': new_x, 'y_min': new_y, '': new_w, 'h': new_h, 'class_id': class_id, 'confidence_score': confidence_score})
+        new_boxes.append({'x_min': new_xmin, 'y_min': new_ymin, 'x_max': new_xmax, 'y_max': new_ymax, 'class_id': class_id, 'confidence_score': confidence_score})
 
     return new_boxes
     
