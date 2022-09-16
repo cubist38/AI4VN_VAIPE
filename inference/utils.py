@@ -17,12 +17,12 @@ def convert_to_original_shape(boxes, old_w, old_h, w, h, target_size = 640):
     y_scale = old_h / h
     
     for bbox in boxes:
-        x, y, w, h, label = bbox['x'], bbox['y'], bbox['w'], bbox['h'], bbox['label']
-        new_x = int(np.round(x * x_scale))
-        new_y = int(np.round(y * y_scale))
-        new_w = int(np.round(w * x_scale))
-        new_h = int(np.round(h * y_scale))
-        new_boxes.append({'x': new_x, 'y': new_y, 'w': new_w, 'h': new_h, 'label': label})
+        xmin, ymin, xmax, ymax, class_id, confidence_score = bbox['x_min'], bbox['y_min'], bbox['x_max'], bbox['y_max'], bbox['class_id'], bbox['confidence_score']
+        new_xmin = int(np.round(xmin * x_scale))
+        new_ymin = int(np.round(ymin * y_scale))
+        new_xmax = int(np.round(xmax * x_scale))
+        new_ymax = int(np.round(ymax * y_scale))
+        new_boxes.append({'x_min': new_x, 'y_min': new_y, '': new_w, 'h': new_h, 'class_id': class_id, 'confidence_score': confidence_score})
 
     return new_boxes
     
