@@ -137,6 +137,13 @@ def check_iou(bbox1, bbox2, iou_thr):
     
 # ====================== MAPPING ==================== #
 
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
+
 # This is the function which maps from text to vaipe's label.
 def rename(label_drugname: Dict, text):
     if text in label_drugname:
@@ -144,14 +151,16 @@ def rename(label_drugname: Dict, text):
     tokenizer = text.split(' ')
     mass = tokenizer[-1]
     if mass[-2:] == "mg":
-        m = float(mass[:-2])/1000
-        if abs(m - int(m)) < 0.001:
-            new_mass = str(int(m)) + 'g'
-        else:
-            new_mass = (str(m) + 'g').replace('.', ',')
+        if isfloat(mass[:-2]):
+            m = float(mass[:-2])/1000
+            if abs(m - int(m)) < 0.001:
+                new_mass = str(int(m)) + 'g'
+            else:
+                new_mass = (str(m) + 'g').replace('.', ',')
     elif mass[-1:] == 'g':
-        m = int(float(mass[:-1].replace(',', '.')) * 1000)
-        new_mass = (str(m) + 'mg')
+        if isfloat(mass[:-1]):
+            m = int(float(mass[:-1].replace(',', '.')) * 1000)
+            new_mass = (str(m) + 'mg')
     else:
         return None
     new_text = ""

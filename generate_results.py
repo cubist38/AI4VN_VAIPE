@@ -22,7 +22,7 @@ if __name__ == '__main__':
     #k_fold = False
 
     # ocr -> run detection + augmentation -> crop bbox images -> run classification
-    run_ocr(cfg['pres_image_dir'], output_dir = cfg['ocr']['output'])
+    #run_ocr(cfg['pres_image_dir'], output_dir = cfg['ocr']['output'])
     od_results = run_detection(cfg['pill_image_dir'], cfg['augment_dir'], cfg['detection'], cfg['crop'])
     if cfg['multi_models']:
         classifier_multi_models(cfg['classifier_multi_models'], device)
